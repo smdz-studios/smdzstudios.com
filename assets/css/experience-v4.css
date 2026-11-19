@@ -13,8 +13,8 @@ html[data-language-motion] [data-es], html[data-language-motion] #hero-title-lin
 #quick-command { display:inline-flex; align-items:center; gap:6px; }
 #quick-command kbd { font:700 10px/1.2 system-ui,sans-serif; white-space:nowrap; }
 #command-dialog { padding:0; width:min(520px,calc(100% - 36px)); max-height: min(620px,calc(100dvh - 48px)); border:var(--bl-border-thick); border-radius:var(--bl-radius-lg); color:var(--bl-ink); background:var(--bl-panel); box-shadow:var(--bl-shadow-lg); overflow:hidden; }
-#command-dialog[open] { display:flex; flex-direction:column; animation:command-in 220ms cubic-bezier(.2,.8,.2,1) both; }
-#command-dialog::backdrop { background:rgba(12,13,16,.65); }
+#command-dialog[open] { display:flex; flex-direction:column; animation:command-in 300ms cubic-bezier(.18,1.25,.32,1) both; }
+#command-dialog::backdrop { background:rgba(12,13,16,.65); animation:command-backdrop-in 240ms ease both; }
 .command-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:16px 18px 12px; }
 .command-head h2 { margin:0; font:italic 900 24px/1.05 var(--bl-font-display); text-transform:uppercase; }
 .command-search { display:flex; align-items:center; gap:10px; margin:0 18px 12px; border:var(--bl-border); border-radius:var(--bl-radius-sm); background:var(--bl-panel-alt); padding:10px 12px; }
@@ -41,7 +41,7 @@ html[data-language-motion] [data-es], html[data-language-motion] #hero-title-lin
 .page-wipe { position:fixed; inset:0; z-index:200100; pointer-events:none; background:#ffcc28; transform:scaleX(0); transform-origin:left center; border-right:6px solid #15171a; }
 html.page-leaving .page-wipe { animation:page-cover 240ms cubic-bezier(.6,0,.3,1) both; pointer-events:auto; }
 html.page-arriving .page-wipe { animation:page-uncover 360ms cubic-bezier(.6,0,.3,1) both; pointer-events:auto; }
-@keyframes command-in { from { opacity:0; transform:translateY(-10px) scale(.97); } to { opacity:1; transform:none; } }
+@keyframes command-in { from { opacity:0; transform:translateY(22px) scale(.92); } to { opacity:1; transform:none; } }
 @keyframes share-pop { from { opacity:0; transform:translate(-50%,12px) scale(.94); } to { opacity:1; transform:translate(-50%,0) scale(1); } }
 @keyframes share-button-pop { 50% { scale:1.08; } }
 @keyframes page-cover { from { transform:scaleX(0); } to { transform:scaleX(1); } }
@@ -50,3 +50,15 @@ html.page-arriving .page-wipe { animation:page-uncover 360ms cubic-bezier(.6,0,.
 @media(prefers-reduced-motion:reduce) { html[data-language-motion] [data-es], html[data-language-motion] #hero-title-line, html[data-language-motion] .state-label, html[data-language-motion] #status-time, html[data-language-motion] [data-v4-copy] { transition:none!important; } .page-wipe { display:none!important; } #command-dialog[open], .share-notice:not([hidden]), #share-site.is-copied { animation:none!important; } }
 #command-dialog { position:fixed; inset:0; margin:auto; }
 #command-dialog:not([open]) { display:none; }
+
+.command-search #command-query:focus,.command-search #command-query:focus-visible { outline:none!important; outline-offset:0!important; box-shadow:none!important; animation:none!important; }
+.command-search:focus-within { outline:2px solid #ffcc28; outline-offset:2px; }
+#command-close { width:38px; height:38px; padding:0; min-height:38px; flex:none; background:#d83b4b; color:#fff; border-color:#15171a; box-shadow:2px 3px 0 #15171a; }
+#command-close:hover { background:#b92439; color:#fff; }
+#command-close:active { background:#a91e31; color:#fff; }
+#command-dialog[open].is-closing { animation:command-out 200ms cubic-bezier(.4,0,.65,1) both; pointer-events:none; }
+#command-dialog.is-closing::backdrop { animation:command-backdrop-out 200ms ease both; }
+@keyframes command-out { from { opacity:1; transform:none; } to { opacity:0; transform:translateY(18px) scale(.94); } }
+@keyframes command-backdrop-in { from { opacity:0; } to { opacity:1; } }
+@keyframes command-backdrop-out { from { opacity:1; } to { opacity:0; } }
+@media(prefers-reduced-motion:reduce) { #command-dialog[open],#command-dialog[open].is-closing,#command-dialog::backdrop,#command-dialog.is-closing::backdrop { animation:none!important; } }

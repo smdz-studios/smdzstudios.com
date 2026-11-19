@@ -46,6 +46,6 @@ For local development, open this folder in VS Code and launch `index.html` using
 
 ## Experience
 
-Dark theme by default, six languages (EN, ES, FR, DE, PT, IT), per-browser persistent preferences and cross-tab synchronization. Animated ribbon, cinematic background, logo effects, synchronized language and page transitions, bidirectional scroll effects, floating section navigation with directional active-label transitions, Madrid clock, quick commands (Ctrl/Cmd+K), sharing, custom work availability and service status. Respects system reduced motion. PWA installation depends on browser support and HTTPS. Fonts are served by Google Fonts with local fallbacks.
+Dark theme by default, six languages (EN, ES, FR, DE, PT, IT), per-browser persistent preferences and cross-tab synchronization. Animated ribbon, cinematic background, logo effects, synchronized language and page transitions, bidirectional scroll effects, floating section navigation with directional active-label transitions, Madrid clock, quick commands (Ctrl/Cmd+K) with animated opening/closing and a single search focus ring, structured multilingual footer with navigation, support and legal links, sharing, custom work availability and service status. Respects system reduced motion. PWA installation depends on browser support and HTTPS. Fonts are served by Google Fonts with local fallbacks.
 
 Site metadata, sitemap and social cards are set for the official domain. Social preview: `https://smdzstudios.com/assets/images/social-preview.jpg`.
