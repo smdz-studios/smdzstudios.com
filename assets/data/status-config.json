@@ -1,5 +1,5 @@
 {
-  "landing": "./health.json",
+  "landing": "./assets/data/health.json",
   "store": "https://smdz-studios.tebex.io/",
   "docs": "https://docs.smdz-studios.com/",
   "discord": null

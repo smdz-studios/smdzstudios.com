@@ -12,7 +12,7 @@
   const t=i=>(copy[root.lang]||copy.en)[i];
   const svg=path=>`<svg class="icon" aria-hidden="true" viewBox="0 0 24 24">${path}</svg>`;
   const icons={search:svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>'),close:svg('<path d="m6 6 12 12M18 6 6 18"/>'),arrow:svg('<path d="M7 17 17 7M7 7h10v10"/>'),link:svg('<path d="M10 13a4 4 0 0 0 6 0l3-3a4 4 0 0 0-6-6l-2 2m3 5a4 4 0 0 0-6 0l-3 3a4 4 0 0 0 6 6l2-2"/>'),check:svg('<path d="m5 12 4 4L19 6"/>')};
-  const base=new URL('../',document.currentScript.src);
+  const base=new URL('../../',document.currentScript.src);
   const pageLink=/^(?:\.\/|\/)?(index|status|404)\.html([?#].*)?$/i;
   document.querySelectorAll('a[href]').forEach(a=>{const match=a.getAttribute('href').match(pageLink);if(match)a.href=new URL(match[1]+'.html'+(match[2]||''),base).href;});
   const local=(file='index.html')=>new URL(file,base).href;

@@ -12,7 +12,7 @@
 .cinema-camera { position:absolute; inset:0; transform:translate3d(var(--camera-x,0px),var(--camera-y,0px),0) scale(1.045); }
 .cinema-camera .ambient-photo { inset:-18px; animation:cinema-zoom 36s ease-in-out infinite alternate; }
 .cinema-grain,.cinema-vignette { position:absolute; inset:0; pointer-events:none; }
-.cinema-grain { background:url('grain.svg') repeat; opacity:.085; mix-blend-mode:soft-light; }
+.cinema-grain { background:url('../images/grain.svg') repeat; opacity:.085; mix-blend-mode:soft-light; }
 .cinema-vignette { background:radial-gradient(ellipse at 50% 43%,transparent 35%,rgba(15,17,20,.17) 100%); }
 html[data-theme=dark] .cinema-vignette { background:radial-gradient(ellipse at 50% 43%,transparent 29%,rgba(0,0,0,.43) 100%); }
 @keyframes cinema-zoom { from{transform:scale(1.01)} to{transform:scale(1.095)} }
