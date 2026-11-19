@@ -22,7 +22,7 @@
   const state=Object.hasOwn({available:1,limited:1,closed:1,inquire:1},config.customWorkAvailability)?config.customWorkAvailability:'inquire';
   const statusIndex={available:16,limited:17,closed:18,inquire:19};
   const openButton=document.createElement('button');openButton.className='btn';openButton.id='quick-command';openButton.type='button';openButton.innerHTML=icons.search+'<kbd aria-hidden="true">Ctrl K</kbd>';openButton.setAttribute('aria-keyshortcuts','Control+K Meta+K');openButton.setAttribute('aria-haspopup','dialog');document.querySelector('.header-actions')?.prepend(openButton);
-  const shareButton=document.createElement('button');shareButton.className='btn btn-small';shareButton.id='share-site';shareButton.type='button';shareButton.innerHTML=icons.link+'<span data-v4-copy></span>';
+  const shareButton=document.createElement('button');shareButton.className=document.querySelector('.status-bottom')?'btn btn-large':'btn btn-small';shareButton.id='share-site';shareButton.type='button';shareButton.innerHTML=icons.link+'<span data-v4-copy></span>';
   (document.querySelector('.footer-tools')||document.querySelector('.status-bottom')||document.querySelector('.error-actions'))?.append(shareButton);
   const notice=document.createElement('div');notice.className='share-notice';notice.hidden=true;notice.setAttribute('role','status');document.body.append(notice);let noticeTimer=0;
   function announce(message){clearTimeout(noticeTimer);notice.textContent=message;notice.hidden=false;noticeTimer=setTimeout(()=>{notice.hidden=true;shareButton.classList.remove('is-copied');shareButton.innerHTML=icons.link+'<span data-v4-copy></span>';shareButton.querySelector('span').textContent=t(12);},2500);}

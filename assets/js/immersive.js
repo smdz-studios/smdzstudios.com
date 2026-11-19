@@ -8,6 +8,8 @@
   const exit = document.querySelector('.cinema-exit');
   const dots = [...document.querySelectorAll('.section-dot')];
   const sections = dots.map(dot => document.querySelector(dot.hash));
+  const sectionNav = document.querySelector('.section-dots');
+  let activeSection = -1;
   const magnets = [...document.querySelectorAll('.site-nav .btn,.custom-contact')];
   const loader = document.querySelector('.cinema-loader');
   let pointer = null, frame = 0, scrollFrame = 0, previous = 0, exitTimer = 0;
@@ -34,7 +36,14 @@
       if(d < distance){ distance=d;best=i; }
     });
     if(scrollY > 0 && scrollY + innerHeight >= root.scrollHeight - 8) best = sections.length-1;
-    dots.forEach((dot,i) => { if(i===best) dot.setAttribute('aria-current','location'); else dot.removeAttribute('aria-current'); });
+    if(best===activeSection)return;
+    sectionNav.dataset.direction=best<activeSection?'up':'down';
+    dots.forEach((dot,i) => {
+      dot.classList.remove('section-arriving');
+      if(i===best){ dot.setAttribute('aria-current','location'); if(activeSection!==-1)dot.classList.add('section-arriving'); }
+      else dot.removeAttribute('aria-current');
+    });
+    activeSection=best;
   }
   function queueSections() { if(!scrollFrame) scrollFrame=requestAnimationFrame(updateSections); }
   addEventListener('scroll',queueSections,{passive:true});
