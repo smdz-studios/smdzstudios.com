@@ -15,7 +15,16 @@
   save('smdz-landing-language',lang);
   function update() {
     root.lang=lang;
-    if(document.querySelector('.status-page')||document.getElementById('refresh-status'))document.title=({en:'Service status',es:'Estado de servicios',fr:'État des services',de:'Dienststatus',pt:'Estado dos serviços',it:'Stato dei servizi'})[lang]+' | SMDZ Studios';
+    if(document.body.classList.contains('invite-page'))document.title=({en:'Discord community',es:'Comunidad de Discord',fr:'Communauté Discord',de:'Discord-Community',pt:'Comunidade Discord',it:'Community Discord'})[lang]+' | SMDZ Studios';
+    else if(document.querySelector('.status-page')||document.getElementById('refresh-status'))document.title=({en:'Service status',es:'Estado de servicios',fr:'État des services',de:'Dienststatus',pt:'Estado dos serviços',it:'Stato dei servizi'})[lang]+' | SMDZ Studios';
+    else document.title=({en:"Page not found",es:"Página no encontrada",fr:"Page introuvable",de:"Seite nicht gefunden",pt:"Página não encontrada",it:"Pagina non trovata"})[lang]+" | SMDZ Studios";
+    const labels={"en": ["Services", "Footer navigation", "SMDZ Studios home"], "es": ["Servicios", "Navegación del pie de página", "Inicio de SMDZ Studios"], "fr": ["Services", "Navigation de pied de page", "Accueil SMDZ Studios"], "de": ["Dienste", "Fußzeilennavigation", "SMDZ Studios Startseite"], "pt": ["Serviços", "Navegação do rodapé", "Início da SMDZ Studios"], "it": ["Servizi", "Navigazione del piè di pagina", "Home di SMDZ Studios"]}[lang];
+    document.querySelector(".status-service-grid")?.setAttribute("aria-label",labels[0]);
+    document.querySelector(".compact-footer-links")?.setAttribute("aria-label",labels[1]);
+    document.querySelector("main a[aria-label]")?.setAttribute("aria-label",labels[2]);
+    const description=document.body.classList.contains("invite-page")?({en:"Join the official SMDZ Studios Discord community.",es:"Únete a la comunidad oficial de SMDZ Studios en Discord.",fr:"Rejoins la communauté officielle de SMDZ Studios sur Discord.",de:"Tritt der offiziellen SMDZ Studios Discord-Community bei.",pt:"Junta-te à comunidade oficial da SMDZ Studios no Discord.",it:"Entra nella community ufficiale di SMDZ Studios su Discord."})[lang]:{"en": "Check the availability of our website and connected platforms from your browser.", "es": "Comprueba la disponibilidad de nuestra web y plataformas desde tu navegador.", "fr": "Vérifiez la disponibilité de notre site et des plateformes depuis votre navigateur.", "de": "Prüfe die Erreichbarkeit unserer Website und Plattformen in deinem Browser.", "pt": "Verifica a disponibilidade do nosso site e das plataformas a partir do teu navegador.", "it": "Verifica la disponibilità del nostro sito e delle piattaforme dal tuo browser."}[lang];
+    for(const selector of ['meta[name="description"]','meta[property="og:description"]','meta[name="twitter:description"]']){const meta=document.querySelector(selector);if(meta)meta.content=description;}
+    for(const selector of ['meta[property="og:title"]','meta[name="twitter:title"]']){const meta=document.querySelector(selector);if(meta)meta.content=document.title;}
     copy.forEach(entry=>{entry.node.textContent=entry[lang]??entry.en});
     const [flag, label, light, dark]=locales[lang];
     const active=root.dataset.theme==='dark';

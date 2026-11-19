@@ -8,12 +8,14 @@
   let frame = 0, pendingScan = false, counter = 0;
   const isHidden = node => !!(node.closest('[hidden]') || getComputedStyle(node).visibility==='hidden');
   const rootElement = document.scrollingElement || document.documentElement;
+  const railLabels={en:["Vertical scroll","Horizontal scroll"],es:["Desplazamiento vertical","Desplazamiento horizontal"],fr:["Défilement vertical","Défilement horizontal"],de:["Vertikaler Bildlauf","Horizontaler Bildlauf"],pt:["Deslocamento vertical","Deslocamento horizontal"],it:["Scorrimento verticale","Scorrimento orizzontale"]};
+  const railLabel=axis=>(railLabels[document.documentElement.lang]||railLabels.en)[axis==='y'?0:1];
   function createRail(axis, element, root){
     const track = document.createElement('div');
     const thumb = document.createElement('div');
     track.className = 'bl-sb-track bl-sb-'+axis;
     track.setAttribute('role','scrollbar');
-    track.setAttribute('aria-label',axis==='y'?'Vertical scroll':'Horizontal scroll');
+    track.setAttribute('aria-label',railLabel(axis));
     track.setAttribute('aria-orientation',axis==='y'?'vertical':'horizontal');
     track.setAttribute('aria-valuemin','0');
     track.setAttribute('aria-valuenow','0');
@@ -142,7 +144,9 @@
     track.setAttribute('aria-valuenow',String(Math.round(scrollPos)));
     track.setAttribute('aria-valuemax',String(Math.round(max)));
   }
-  function refresh(){frame=0;targets.forEach(states=>states.forEach(paintRail));}
+  function refresh(){frame=0;targets.forEach(states=>states.forEach(state=>{state.track.setAttribute('aria-label',railLabel(state.axis));paintRail(state);}));}
+  const languageObserver=new MutationObserver(schedule);
+  languageObserver.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   function schedule(){if(!frame)frame=requestAnimationFrame(refresh);}
   const selectors='[data-bl-scroll],.dialog-body,#detailsDrawer,.bl-select-menu,.bl-date-calendar,textarea.field';
   function scan(){
@@ -159,7 +163,7 @@
     requestAnimationFrame(scan);
   }
   function destroy(){
-    mutation.disconnect();observer.disconnect();
+    mutation.disconnect();observer.disconnect();languageObserver.disconnect();
     targets.forEach(states=>states.forEach(s=>s.track.remove()));
     targets.clear();
     document.documentElement.classList.remove('bl-scrollbars-on');

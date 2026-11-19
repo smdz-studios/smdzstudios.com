@@ -59,9 +59,6 @@
 .service-open{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--bl-ink-muted);}
 .service-open:hover,.service-open:focus-visible{color:var(--bl-ink);text-decoration:underline;text-underline-offset:3px;}
 .service-open .icon{width:14px;height:14px;}
-.status-note{display:flex;align-items:flex-start;gap:12px;margin-top:23px;padding:16px 18px;background:var(--bl-panel-alt);border:var(--bl-border);box-shadow:var(--bl-shadow);border-radius:12px;}
-.status-note>.icon{flex:none;width:21px;height:21px;color:var(--bl-ink);}
-.status-note strong{font-size:13px;}.status-note p{color:var(--bl-ink-muted);font-size:12px;line-height:1.65;margin-top:4px;}
 .status-bottom{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:14px;margin:28px auto 0;width:min(100%,690px);}
 .status-bottom .btn{width:100%;min-height:48px;padding:11px 13px;font-size:16px;white-space:normal;text-align:center;line-height:1.12;box-shadow:2px 3px 0 var(--bl-line);}
 .status-bottom .btn .icon{flex:none;width:16px;height:16px;}

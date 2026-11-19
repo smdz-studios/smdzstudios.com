@@ -1,9 +1,11 @@
-html.scroll-synced [data-scroll-sync] { opacity:var(--reveal-opacity,1); translate:0 var(--reveal-shift,0px); }
+html.scroll-synced [data-scroll-sync] { opacity:var(--reveal-opacity,1); translate:0 var(--reveal-shift,0px); scale:var(--reveal-scale,1); rotate:var(--reveal-tilt,0deg); transform-origin:center; }
 html.scroll-synced .hero [data-enter][data-scroll-sync],html.scroll-synced .studio-ribbon[data-scroll-sync],html.scroll-synced .site-header[data-scroll-sync] { animation:none!important; }
-html.scroll-synced [data-scroll-sync]:focus-within { opacity:1!important; translate:none!important; }
+html.scroll-synced [data-scroll-sync]:focus-within { opacity:1!important; translate:none!important; scale:1!important; rotate:none!important; }
 html.scroll-synced .scroll-drawing { border-color:transparent!important; }
 html.scroll-synced .scroll-drawing .draw-border { opacity:1; }
 html.scroll-synced .scroll-drawing .draw-border rect { stroke-dashoffset:var(--reveal-dash,0); }
 html.scroll-synced .scroll-drawing:focus-within { border-color:var(--bl-line)!important; }
 html.scroll-synced .scroll-drawing:focus-within .draw-border { opacity:0; }
-@media(prefers-reduced-motion:reduce){html.scroll-synced [data-scroll-sync]{opacity:1!important;translate:none!important}html.scroll-synced .scroll-drawing{border-color:var(--bl-line)!important}html.scroll-synced .scroll-drawing .draw-border{opacity:0!important}}
+@media(prefers-reduced-motion:reduce){html.scroll-synced [data-scroll-sync]{opacity:1!important;translate:none!important;scale:1!important;rotate:none!important}html.scroll-synced .scroll-drawing{border-color:var(--bl-line)!important}html.scroll-synced .scroll-drawing .draw-border{opacity:0!important}}
+
+html.scroll-synced [data-scroll-sync]:focus-within [data-scroll-sync] { opacity:1!important; translate:none!important; scale:1!important; rotate:none!important; }

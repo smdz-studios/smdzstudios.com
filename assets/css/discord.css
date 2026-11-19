@@ -1,0 +1,47 @@
+.invite-page { min-height:100svh; }
+.invite-page .site-header { position:relative; inset:auto; width:100%; display:flex; justify-content:flex-end; padding:18px clamp(18px,4vw,48px); min-height:64px; }
+.invite-page .ambient-photo { filter:blur(3px); }
+.invite-page .ambient-overlay { background:linear-gradient(135deg,rgba(242,243,246,.77),rgba(234,235,240,.89)); }
+html[data-theme=dark] .invite-page .ambient-overlay { background:linear-gradient(135deg,rgba(17,18,21,.50),rgba(17,18,21,.86)); }
+.invite-vignette { position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.16) 100%); }
+.invite-main { flex:1; display:grid; place-items:center; padding:20px 0 32px; }
+.invite-content { display:grid; justify-items:center; width:min(600px,100%); text-align:center; gap:14px; }
+.invite-logo-link { display:block; width:clamp(136px,20vw,190px); transform-style:preserve-3d; perspective:650px; }
+.invite-logo { display:block; width:100%; height:auto; filter:drop-shadow(0 8px 16px rgba(0,0,0,.24)); transition:transform 160ms ease-out; transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); }
+.invite-brand-icon { display:grid; place-items:center; width:60px; height:60px; background:#5865f2; color:#fff; border:3px solid #15171a; box-shadow:4px 5px 0 #15171a; border-radius:14px; transform:rotate(-7deg); margin-block:-12px 4px; }
+.invite-discord-icon { width:29px; height:29px; fill:currentColor; stroke:none; flex:none; }
+.invite-kicker { display:flex; align-items:center; gap:8px; font-weight:800; color:var(--bl-ink-muted); letter-spacing:.12em; font-size:11px; text-transform:uppercase; }
+.invite-kicker i { width:8px; height:8px; background:#ffcc28; border:1px solid #15171a; transform:rotate(-10deg); }
+.invite-content h1 { font:italic 900 clamp(37px,7vw,66px)/.99 var(--bl-font-display); text-transform:uppercase; color:var(--bl-ink); letter-spacing:-.035em; overflow-wrap:anywhere; }
+.invite-accent { color:var(--bl-accent-dark); position:relative; display:inline-block; }
+html[data-theme=dark] .invite-accent { color:#ffcc28; }
+.invite-accent::after { content:""; position:absolute; left:0; right:0; bottom:-8px; height:9px; background:url('../images/brush-underline.svg') center/100% 100% no-repeat; transform-origin:left; animation:invite-brush 650ms 420ms both; }
+.invite-description { color:var(--bl-ink-muted); max-width:440px; font-size:15px; line-height:1.65; margin-top:8px; }
+.invite-members { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:9px 23px; color:var(--bl-ink-muted); font-size:13px; }
+.invite-members[hidden],.invite-countdown[hidden],.invite-error[hidden] { display:none; }
+.invite-members > span { display:flex; gap:6px; align-items:center; }
+.invite-members i { background:#9499a4; width:8px; height:8px; border-radius:50%; }
+.invite-members i.invite-online { background:#66d98c; box-shadow:0 0 0 3px rgba(102,217,140,.17); }
+.invite-members b { color:var(--bl-ink); font-variant-numeric:tabular-nums; }
+.invite-countdown { width:min(440px,100%); padding:14px 16px 11px; border:var(--bl-border-thick); background:var(--bl-panel); border-radius:var(--bl-radius-md); box-shadow:3px 4px 0 #15171a; text-align:left; margin-top:4px; }
+.invite-countdown-line { display:flex; align-items:center; gap:12px; justify-content:space-between; color:var(--bl-ink-muted); font-size:13px; font-weight:700; }
+.invite-countdown-line strong { color:var(--bl-ink); font-size:18px; font-variant-numeric:tabular-nums; }
+.invite-progress { height:12px; margin:9px 0 5px; background:var(--bl-panel-alt); border:2px solid #15171a; border-radius:5px; overflow:hidden; }
+.invite-progress i { display:block; height:100%; width:100%; background:#ffcc28; transform-origin:left center; transform:scaleX(var(--invite-progress,0)); }
+.invite-pause { line-height:1.5; font-family:inherit; font-size:12px; font-weight:700; color:var(--bl-ink-muted); background:transparent; border:0; padding:6px 0 2px; cursor:pointer; text-decoration:underline; }
+.invite-join.btn { width:min(440px,100%); min-height:58px; background:#5865f2; color:#fff; margin-top:3px; font-size:clamp(15px,3.4vw,20px); text-align:center; white-space:normal; justify-content:center; }
+.invite-join.btn:hover { background:#4752c4; color:#fff; }
+.invite-join .invite-discord-icon { width:22px; height:22px; }
+.invite-join .icon { margin-left:auto; width:17px; flex:none; }
+.invite-join > span { margin-inline:auto; }
+.invite-back { display:flex; align-items:center; justify-content:center; gap:7px; font-size:13px; font-weight:800; color:var(--bl-ink-muted); padding:7px 10px; }
+.invite-back:hover { color:var(--bl-ink); text-decoration:underline; }
+.invite-error { width:min(440px,100%); border:2px solid #15171a; background:var(--bl-panel); color:var(--bl-ink); padding:12px; border-left:6px solid #eb6464; border-radius:6px; font-size:13px; }
+.invite-footer { flex:none; color:var(--bl-ink-muted); text-align:center; font-size:12px; padding:16px 0 23px; border-top:1px solid var(--bl-divider); }
+.invite-content > * { animation:invite-enter 560ms cubic-bezier(.2,.82,.25,1.18) both; animation-delay:calc(var(--invite-order,0)*45ms); }
+@keyframes invite-enter { from { opacity:0; translate:0 22px; scale:.94; } to { opacity:1; translate:0 0; scale:1; } }
+@keyframes invite-brush { from {transform:scaleX(0)} to {transform:scaleX(1)} }
+@media(max-width:520px) { .invite-content { gap:12px; } .invite-main { padding-top:4px; } .invite-brand-icon { width:52px;height:52px; } .invite-description { font-size:14px; } .invite-countdown { padding-inline:12px; } }
+@media(prefers-reduced-motion:reduce) { .invite-content > *, .invite-accent::after { animation:none!important; } .invite-logo { transform:none; transition:none; } }
+
+.invite-join[hidden] { display:none!important; }

@@ -2,6 +2,8 @@
 
 https://smdzstudios.com/
 
+Independent development studio specializing in systems and assets for Grand Theft Auto V and Red Dead Redemption 2 through FiveM and RedM.
+
 Proprietary website. Copyright (c) 2025–2026 SMDZ Studios. All rights reserved. No open-source license is granted. See [LICENSE](LICENSE). Third-party material remains subject to its respective rights and licenses.
 
 ## Structure
@@ -46,6 +48,12 @@ For local development, open this folder in VS Code and launch `index.html` using
 
 ## Experience
 
-Dark theme by default, six languages (EN, ES, FR, DE, PT, IT), per-browser persistent preferences and cross-tab synchronization. Animated ribbon, cinematic background, logo effects, synchronized language and page transitions, bidirectional scroll effects, floating section navigation with directional active-label transitions, Madrid clock, quick commands (Ctrl/Cmd+K) with animated opening/closing and a single search focus ring, structured multilingual footer with navigation, support and legal links, sharing, custom work availability and service status. Respects system reduced motion. PWA installation depends on browser support and HTTPS. Fonts are served by Google Fonts with local fallbacks.
+Dark theme by default, six languages (EN, ES, FR, DE, PT, IT), per-browser persistent preferences and cross-tab synchronization. Animated ribbon, cinematic background, logo effects, synchronized language and page transitions, bidirectional scroll effects with staged child reveals, directional translation, subtle scale and rotation, floating section navigation with directional active-label transitions, Madrid clock, quick commands (Ctrl/Cmd+K) with animated opening/closing and a single search focus ring, structured multilingual footer with navigation, support and legal links, sharing, custom work availability and service status. Respects system reduced motion. PWA installation depends on browser support and HTTPS. Fonts are served by Google Fonts with local fallbacks.
 
 Site metadata, sitemap and social cards are set for the official domain. Social preview: `https://smdzstudios.com/assets/images/social-preview.jpg`.
+
+## Discord community gateway
+
+The invitation page is located at `discord/index.html`, publicly accessible at `https://smdzstudios.com/discord/`. It uses the same saved language and theme as the main site, and redirects to `https://discord.gg/6HPcHR4N8m` after five visible seconds. Visitors can pause or join immediately. Approximate Discord member counts are shown only when a public invitation API response is available. A confirmed unknown/expired invitation stops the automatic redirect.
+
+After deploying this repository, change the existing Hostinger URL forwarding for `discord.smdzstudios.com` to `https://smdzstudios.com/discord/` (302 recommended while testing). Do not point the subdomain directly to GitHub Pages or change the main domain DNS. No additional repository is required.

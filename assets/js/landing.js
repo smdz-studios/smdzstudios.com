@@ -14,12 +14,12 @@
   const isReduced = () => systemMotion.matches;
   root.dataset.siteMotion = isReduced() ? 'reduce' : 'full';
   const locales = {
-    en: {flag:'us', name:'English', select:'Select language', light:'Switch to light theme', dark:'Switch to dark theme', title:'Built for Roleplay.', nav:'Main navigation', footer:'Footer navigation', home:'SMDZ Studios home'},
-    es: {flag:'es', name:'Español', select:'Seleccionar idioma', light:'Cambiar a tema claro', dark:'Cambiar a tema oscuro', title:'Creado para Roleplay.', nav:'Navegación principal', footer:'Enlaces del pie de página', home:'Inicio de SMDZ Studios'},
-    fr: {flag:'fr', name:'Français', select:'Choisir la langue', light:'Passer au thème clair', dark:'Passer au thème sombre', title:'Conçu pour le roleplay.', nav:'Navigation principale', footer:'Navigation de pied de page', home:'Accueil SMDZ Studios'},
-    de: {flag:'de', name:'Deutsch', select:'Sprache auswählen', light:'Helles Design aktivieren', dark:'Dunkles Design aktivieren', title:'Für Roleplay entwickelt.', nav:'Hauptnavigation', footer:'Fußzeilennavigation', home:'SMDZ Studios Startseite'},
-    pt: {flag:'pt', name:'Português', select:'Selecionar idioma', light:'Mudar para tema claro', dark:'Mudar para tema escuro', title:'Criado para Roleplay.', nav:'Navegação principal', footer:'Navegação do rodapé', home:'Início da SMDZ Studios'},
-    it: {flag:'it', name:'Italiano', select:'Seleziona lingua', light:'Passa al tema chiaro', dark:'Passa al tema scuro', title:'Creato per il Roleplay.', nav:'Navigazione principale', footer:'Navigazione del piè di pagina', home:'Home di SMDZ Studios'}
+    en: {flag:'us', name:'English', select:'Select language', light:'Switch to light theme', dark:'Switch to dark theme', title:'Built for Roleplay.', nav:'Main navigation', footer:'Footer navigation', home:'SMDZ Studios home', logo:"SMDZ Studios logo"},
+    es: {flag:'es', name:'Español', select:'Seleccionar idioma', light:'Cambiar a tema claro', dark:'Cambiar a tema oscuro', title:'Creado para Roleplay.', nav:'Navegación principal', footer:'Enlaces del pie de página', home:'Inicio de SMDZ Studios', logo:"Logotipo de SMDZ Studios"},
+    fr: {flag:'fr', name:'Français', select:'Choisir la langue', light:'Passer au thème clair', dark:'Passer au thème sombre', title:'Conçu pour le roleplay.', nav:'Navigation principale', footer:'Navigation de pied de page', home:'Accueil SMDZ Studios', logo:"Logo de SMDZ Studios"},
+    de: {flag:'de', name:'Deutsch', select:'Sprache auswählen', light:'Helles Design aktivieren', dark:'Dunkles Design aktivieren', title:'Für Roleplay entwickelt.', nav:'Hauptnavigation', footer:'Fußzeilennavigation', home:'SMDZ Studios Startseite', logo:"SMDZ Studios Logo"},
+    pt: {flag:'pt', name:'Português', select:'Selecionar idioma', light:'Mudar para tema claro', dark:'Mudar para tema escuro', title:'Criado para Roleplay.', nav:'Navegação principal', footer:'Navegação do rodapé', home:'Início da SMDZ Studios', logo:"Logótipo da SMDZ Studios"},
+    it: {flag:'it', name:'Italiano', select:'Seleziona lingua', light:'Passa al tema chiaro', dark:'Passa al tema scuro', title:'Creato per il Roleplay.', nav:'Navigazione principale', footer:'Navigazione del piè di pagina', home:'Home di SMDZ Studios', logo:"Logo di SMDZ Studios"}
   };
   const words = [...document.querySelectorAll('[data-es]')].map(node => ({node, en:node.textContent, es:node.dataset.es, fr:node.dataset.fr, de:node.dataset.de, pt:node.dataset.pt, it:node.dataset.it}));
   const ribbon = document.querySelector('.studio-ribbon');
@@ -87,11 +87,14 @@
     choices.forEach(button => button.setAttribute('aria-current', String(button.dataset.language === lang)));
     document.querySelector('.footer-links').setAttribute('aria-label', t.footer);
     document.querySelector('.site-nav').setAttribute('aria-label', t.nav);
+    document.querySelector('.logo-parallax').setAttribute('aria-label', t.logo);
+    document.querySelector('.hero-logo').alt=t.logo;
+    document.querySelector('.studio-footer a[aria-label]').setAttribute('aria-label', t.home);
   }
   function applyLanguage(instantTitle = false) {
     root.lang = lang;
     words.forEach(entry => { entry.node.textContent = entry[lang] ?? entry.en; });
-    const seo = {en:['FiveM & RedM Development','SMDZ Studios creates FiveM and RedM scripts, interfaces and custom roleplay systems. Explore the store, documentation and development services.','en_US'],es:['Desarrollo FiveM y RedM','SMDZ Studios crea scripts, interfaces y sistemas de roleplay personalizados para FiveM y RedM. Descubre la tienda, documentación y servicios.','es_ES'],fr:['Développement FiveM et RedM','SMDZ Studios crée des scripts, des interfaces et des systèmes de roleplay sur mesure pour FiveM et RedM. Découvrez la boutique et les services.','fr_FR'],de:['FiveM- und RedM-Entwicklung','SMDZ Studios entwickelt Skripte, Interfaces und individuelle Roleplay-Systeme für FiveM und RedM. Entdecke den Shop und die Dienstleistungen.','de_DE'],pt:['Desenvolvimento FiveM e RedM','A SMDZ Studios cria scripts, interfaces e sistemas de roleplay personalizados para FiveM e RedM. Explora a loja, a documentação e os serviços.','pt_PT'],it:['Sviluppo FiveM e RedM','SMDZ Studios crea script, interfacce e sistemi roleplay personalizzati per FiveM e RedM. Scopri il negozio, la documentazione e i servizi.','it_IT']}[lang];
+    const seo = {en:['FiveM & RedM Development',"SMDZ Studios is an independent development studio specializing in systems and assets for Grand Theft Auto V and Red Dead Redemption 2, through FiveM and RedM.",'en_US'],es:['Desarrollo FiveM y RedM',"SMDZ Studios es un estudio independiente especializado en el desarrollo de sistemas y assets para Grand Theft Auto V y Red Dead Redemption 2, a través de FiveM y RedM.",'es_ES'],fr:['Développement FiveM et RedM',"SMDZ Studios est un studio indépendant spécialisé dans le développement de systèmes et d’assets pour Grand Theft Auto V et Red Dead Redemption 2, via FiveM et RedM.",'fr_FR'],de:['FiveM- und RedM-Entwicklung',"SMDZ Studios ist ein unabhängiges Entwicklungsstudio für Systeme und Assets für Grand Theft Auto V und Red Dead Redemption 2, über FiveM und RedM.",'de_DE'],pt:['Desenvolvimento FiveM e RedM',"A SMDZ Studios é um estúdio independente especializado no desenvolvimento de sistemas e assets para Grand Theft Auto V e Red Dead Redemption 2, através do FiveM e do RedM.",'pt_PT'],it:['Sviluppo FiveM e RedM',"SMDZ Studios è uno studio indipendente specializzato nello sviluppo di sistemi e asset per Grand Theft Auto V e Red Dead Redemption 2, attraverso FiveM e RedM.",'it_IT']}[lang];
     document.title = 'SMDZ Studios | ' + seo[0];
     document.querySelector('meta[name="description"]').content = seo[1];
     document.querySelector('meta[property="og:title"]').content = document.title;
