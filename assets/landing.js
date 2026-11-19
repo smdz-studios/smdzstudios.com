@@ -5,18 +5,76 @@
   const language = document.getElementById('language');
   const options = document.getElementById('language-options');
   const choices = [...options.querySelectorAll('[data-language]')];
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const heroTitle = document.getElementById('hero-title');
+  const heroTitleLine = document.getElementById('hero-title-line');
+  let heroTypingToken = 0;
+  const systemMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const read = key => { try { return localStorage.getItem(key); } catch { return null; } };
   const save = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
+  const isReduced = () => systemMotion.matches;
+  root.dataset.siteMotion = isReduced() ? 'reduce' : 'full';
   const locales = {
-    en: {flag:'gb', name:'English', select:'Select language', light:'Switch to light theme', dark:'Switch to dark theme', title:'Built for Roleplay.', nav:'Main navigation', footer:'Footer navigation', home:'SMDZ Studios home'},
+    en: {flag:'us', name:'English', select:'Select language', light:'Switch to light theme', dark:'Switch to dark theme', title:'Built for Roleplay.', nav:'Main navigation', footer:'Footer navigation', home:'SMDZ Studios home'},
     es: {flag:'es', name:'Español', select:'Seleccionar idioma', light:'Cambiar a tema claro', dark:'Cambiar a tema oscuro', title:'Creado para Roleplay.', nav:'Navegación principal', footer:'Enlaces del pie de página', home:'Inicio de SMDZ Studios'},
     fr: {flag:'fr', name:'Français', select:'Choisir la langue', light:'Passer au thème clair', dark:'Passer au thème sombre', title:'Conçu pour le roleplay.', nav:'Navigation principale', footer:'Navigation de pied de page', home:'Accueil SMDZ Studios'},
-    de: {flag:'de', name:'Deutsch', select:'Sprache auswählen', light:'Helles Design aktivieren', dark:'Dunkles Design aktivieren', title:'Für Roleplay entwickelt.', nav:'Hauptnavigation', footer:'Fußzeilennavigation', home:'SMDZ Studios Startseite'}
+    de: {flag:'de', name:'Deutsch', select:'Sprache auswählen', light:'Helles Design aktivieren', dark:'Dunkles Design aktivieren', title:'Für Roleplay entwickelt.', nav:'Hauptnavigation', footer:'Fußzeilennavigation', home:'SMDZ Studios Startseite'},
+    pt: {flag:'pt', name:'Português', select:'Selecionar idioma', light:'Mudar para tema claro', dark:'Mudar para tema escuro', title:'Criado para Roleplay.', nav:'Navegação principal', footer:'Navegação do rodapé', home:'Início da SMDZ Studios'},
+    it: {flag:'it', name:'Italiano', select:'Seleziona lingua', light:'Passa al tema chiaro', dark:'Passa al tema scuro', title:'Creato per il Roleplay.', nav:'Navigazione principale', footer:'Navigazione del piè di pagina', home:'Home di SMDZ Studios'}
   };
-  const words = [...document.querySelectorAll('[data-es]')].map(node => ({node, en:node.textContent, es:node.dataset.es, fr:node.dataset.fr, de:node.dataset.de}));
+  const words = [...document.querySelectorAll('[data-es]')].map(node => ({node, en:node.textContent, es:node.dataset.es, fr:node.dataset.fr, de:node.dataset.de, pt:node.dataset.pt, it:node.dataset.it}));
+  const ribbon = document.querySelector('.studio-ribbon');
+  const ribbonLabels = {en:'Studio values',es:'Valores del estudio',fr:'Valeurs du studio',de:'Werte des Studios',pt:'Valores do estúdio',it:'Valori dello studio'};
+  function updateRibbon() { ribbon.setAttribute('aria-label', ribbonLabels[lang]); }
+  if ('IntersectionObserver' in window) {
+    const ribbonObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => ribbon.classList.toggle('is-offscreen', !entry.isIntersecting));
+    });
+    ribbonObserver.observe(ribbon);
+  }
   const savedLang = read('smdz-landing-language');
-  let lang = Object.hasOwn(locales,savedLang) ? savedLang : 'en';
+  const detectedLang = (navigator.languages?.length ? navigator.languages : [navigator.language]).map(value => String(value).toLowerCase().split(/[-_]/)[0]).find(value => Object.hasOwn(locales,value));
+  let lang = Object.hasOwn(locales,savedLang) ? savedLang : detectedLang || 'en';
+  function getHeroTitleText() {
+    const key = 'title' + lang.charAt(0).toUpperCase() + lang.slice(1);
+    return heroTitle.dataset[key] || heroTitle.dataset.titleEn || 'Built for Roleplay.';
+  }
+  function createHeroTitleMarkup(text) {
+    const match = text.match(/roleplay/i);
+    if (!match) return text;
+    const start = match.index || 0;
+    const end = start + match[0].length;
+    const before = text.slice(0, start);
+    const word = text.slice(start, end);
+    const after = text.slice(end);
+    return `${before}<span class="roleplay-word">${word}</span>${after}`;
+  }
+  function animateHeroTitle(delay = 0) {
+    const text = getHeroTitleText();
+    const token = ++heroTypingToken;
+    heroTitle.setAttribute('aria-label', text);
+    heroTitle.classList.remove('is-complete');
+    if (isReduced()) {
+      heroTitleLine.innerHTML = createHeroTitleMarkup(text);
+      heroTitle.classList.add('is-complete');
+      return;
+    }
+    if (root.classList.contains('intro-loading')) return;
+    heroTitleLine.textContent = '';
+    const step = Math.max(20, Math.min(45, 540 / Math.max(1, text.length)));
+    let index = 0;
+    function write() {
+      if (token !== heroTypingToken) return;
+      heroTitleLine.textContent = text.slice(0, index);
+      if (index < text.length) {
+        index += 1;
+        setTimeout(write, step);
+      } else {
+        heroTitleLine.innerHTML = createHeroTitleMarkup(text);
+        heroTitle.classList.add('is-complete');
+      }
+    }
+    if (delay) setTimeout(write, delay); else write();
+  }
   function updateControls() {
     const t = locales[lang];
     const dark = root.dataset.theme === 'dark';
@@ -28,14 +86,21 @@
     choices.forEach(button => button.setAttribute('aria-current', String(button.dataset.language === lang)));
     document.querySelector('.footer-links').setAttribute('aria-label', t.footer);
     document.querySelector('.site-nav').setAttribute('aria-label', t.nav);
-    document.querySelector('.brand').setAttribute('aria-label', t.home);
   }
   function applyLanguage() {
     root.lang = lang;
     words.forEach(entry => { entry.node.textContent = entry[lang] ?? entry.en; });
-    document.title = 'SMDZ Studios — ' + locales[lang].title;
+    const seo = {en:['FiveM & RedM Development','SMDZ Studios creates premium FiveM and RedM scripts, interfaces and custom roleplay systems. Explore the store, documentation and development services.','en_US'],es:['Desarrollo FiveM y RedM','SMDZ Studios crea scripts premium, interfaces y sistemas de roleplay personalizados para FiveM y RedM. Descubre la tienda, documentación y servicios.','es_ES'],fr:['Développement FiveM et RedM','SMDZ Studios crée des scripts premium, des interfaces et des systèmes de roleplay sur mesure pour FiveM et RedM. Découvrez la boutique et les services.','fr_FR'],de:['FiveM- und RedM-Entwicklung','SMDZ Studios entwickelt Premium-Skripte, Interfaces und individuelle Roleplay-Systeme für FiveM und RedM. Entdecke den Shop und die Dienstleistungen.','de_DE'],pt:['Desenvolvimento FiveM e RedM','A SMDZ Studios cria scripts premium, interfaces e sistemas de roleplay personalizados para FiveM e RedM. Explora a loja, a documentação e os serviços.','pt_PT'],it:['Sviluppo FiveM e RedM','SMDZ Studios crea script premium, interfacce e sistemi roleplay personalizzati per FiveM e RedM. Scopri il negozio, la documentazione e i servizi.','it_IT']}[lang];
+    document.title = 'SMDZ Studios | ' + seo[0];
+    document.querySelector('meta[name="description"]').content = seo[1];
+    document.querySelector('meta[property="og:title"]').content = document.title;
+    document.querySelector('meta[property="og:description"]').content = seo[1];
+    document.querySelector('meta[property="og:locale"]').content = seo[2];
+    document.querySelector('meta[name="twitter:title"]').content = document.title;
+    document.querySelector('meta[name="twitter:description"]').content = seo[1];
+    animateHeroTitle();
     updateControls();
-    save('smdz-landing-language',lang);
+    updateRibbon();
   }
   function toggleLanguages(open, focus = false) {
     options.hidden = !open;
@@ -45,6 +110,7 @@
   language.addEventListener('click', () => toggleLanguages(options.hidden, options.hidden));
   choices.forEach(button => button.addEventListener('click', () => {
     lang = button.dataset.language;
+    save('smdz-landing-language',lang);
     applyLanguage();
     toggleLanguages(false, true);
   }));
@@ -63,26 +129,47 @@
   });
   document.addEventListener('dragstart', e => e.preventDefault());
   document.addEventListener('selectstart', e => e.preventDefault());
-  document.addEventListener('click', e => {
+  function showImpact(e, keyboard = false) {
+    if (isReduced()) return;
     const host = e.target.closest('.btn, .language-options button');
-    if (!host || reduced.matches || host.disabled) return;
-    const rect = host.getBoundingClientRect();
-    const effect = document.createElement('span');
-    effect.className = 'bl-impact';
-    effect.setAttribute('aria-hidden','true');
-    host.classList.add('bl-impact-host');
-    effect.style.setProperty('--bl-impact-x', e.detail ? `${e.clientX-rect.left}px` : '50%');
-    effect.style.setProperty('--bl-impact-y', e.detail ? `${e.clientY-rect.top}px` : '50%');
-    host.append(effect);
-    effect.addEventListener('animationend', () => effect.remove(), {once:true});
-    setTimeout(() => effect.remove(),700);
+    if (host?.disabled) return;
+    if (host) {
+      const rect = host.getBoundingClientRect();
+      const x = keyboard ? rect.width / 2 : e.clientX - rect.left;
+      const y = keyboard ? rect.height / 2 : e.clientY - rect.top;
+      const effect = document.createElement('span');
+      effect.className = 'bl-impact';
+      effect.setAttribute('aria-hidden','true');
+      host.classList.add('bl-impact-host');
+      effect.style.setProperty('--bl-impact-x', `${x}px`);
+      effect.style.setProperty('--bl-impact-y', `${y}px`);
+      effect.style.setProperty('--impact-size', `${Math.ceil(2 * Math.hypot(Math.max(x, rect.width-x), Math.max(y, rect.height-y)))}px`);
+      host.append(effect);
+      effect.addEventListener('animationend', () => effect.remove(), {once:true});
+      setTimeout(() => effect.remove(),700);
+    } else if (!keyboard) {
+      const pulse = document.createElement('span');
+      pulse.className = 'landing-click-pulse';
+      pulse.setAttribute('aria-hidden','true');
+      pulse.style.setProperty('--pulse-x', `${e.clientX}px`);
+      pulse.style.setProperty('--pulse-y', `${e.clientY}px`);
+      document.body.append(pulse);
+      pulse.addEventListener('animationend', () => pulse.remove(), {once:true});
+      setTimeout(() => pulse.remove(),650);
+    }
+  }
+  document.addEventListener('pointerdown', e => {
+    if (e.isPrimary && e.button === 0) showImpact(e);
+  }, {capture:true, passive:true});
+  document.addEventListener('click', e => {
+    if (e.detail === 0) showImpact(e, true);
   }, true);
   let themeBusy = false;
   theme.addEventListener('click', async () => {
     if (themeBusy) return;
     const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
     const apply = () => { root.dataset.theme = next; save('smdz-bl-theme',next); updateControls(); };
-    if (!document.startViewTransition || reduced.matches) { apply(); return; }
+    if (!document.startViewTransition || isReduced()) { apply(); return; }
     themeBusy = true;
     const rect = theme.getBoundingClientRect();
     const x = rect.left + rect.width / 2, y = rect.top + rect.height / 2;
@@ -94,11 +181,11 @@
       await transition.finished;
     } catch { apply(); } finally { themeBusy=false; }
   });
-  document.getElementById('year').textContent = new Date().getFullYear();
+  window.addEventListener('smdz:intro-ready', () => animateHeroTitle(560), {once:true});
   applyLanguage();
-  // All scroll effects share one frame update; reveal once and stay visible.
+
   const reveals = [...document.querySelectorAll('[data-reveal]')];
-  if ('IntersectionObserver' in window && !reduced.matches) {
+  if ('IntersectionObserver' in window && !isReduced()) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
@@ -112,12 +199,62 @@
     const offset = Math.max(0, window.scrollY);
     const range = Math.max(1, root.scrollHeight - innerHeight);
     root.style.setProperty('--scroll-progress', Math.min(1, offset / range));
-    document.body.style.setProperty('--parallax', reduced.matches ? '0px' : `${Math.min(34, offset * .075)}px`);
+    document.body.style.setProperty('--parallax', isReduced() ? '0px' : `${Math.min(34, offset * .075)}px`);
     queued = false;
   }
   function queueScroll() { if (!queued) { queued = true; requestAnimationFrame(updateScroll); } }
   addEventListener('scroll', queueScroll, {passive: true});
   addEventListener('resize', queueScroll, {passive: true});
-  reduced.addEventListener('change', () => { if (reduced.matches) reveals.forEach(el => el.classList.add('is-visible')); queueScroll(); });
   updateScroll();
+  const logoSurface = document.querySelector('.logo-parallax');
+  const finePointer = matchMedia('(any-hover: hover) and (any-pointer: fine)');
+  let logoFrame = 0;
+  let logoPointer = null;
+  function resetLogo() {
+    if (logoFrame) cancelAnimationFrame(logoFrame);
+    logoFrame = 0;
+    logoPointer = null;
+    logoSurface.classList.remove('is-tilting');
+    for (const key of ['x', 'y', 'z', 'rx', 'ry']) logoSurface.style.removeProperty('--logo-' + key);
+  }
+  function updateLogo() {
+    logoFrame = 0;
+    if (!logoPointer || isReduced() || !finePointer.matches) { resetLogo(); return; }
+    const rect = logoSurface.getBoundingClientRect();
+    if (!rect.width || !rect.height) { resetLogo(); return; }
+    const clamp = value => Math.max(-1, Math.min(1, value));
+    const x = clamp((logoPointer.x - rect.left) / rect.width * 2 - 1);
+    const y = clamp((logoPointer.y - rect.top) / rect.height * 2 - 1);
+    logoSurface.classList.add('is-tilting');
+    logoSurface.style.setProperty('--logo-x', `${(x * 7).toFixed(2)}px`);
+    logoSurface.style.setProperty('--logo-y', `${(y * 7).toFixed(2)}px`);
+    logoSurface.style.setProperty('--logo-z', '18px');
+    logoSurface.style.setProperty('--logo-rx', `${(-y * 12).toFixed(2)}deg`);
+    logoSurface.style.setProperty('--logo-ry', `${(x * 12).toFixed(2)}deg`);
+  }
+  function trackLogo(event) {
+    if (event.pointerType !== 'mouse' || isReduced() || !finePointer.matches) return;
+    logoPointer = { x: event.clientX, y: event.clientY };
+    if (!logoFrame) logoFrame = requestAnimationFrame(updateLogo);
+  }
+  logoSurface.addEventListener('pointerenter', trackLogo, {passive: true});
+  logoSurface.addEventListener('pointermove', trackLogo, {passive: true});
+  logoSurface.addEventListener('pointerleave', resetLogo);
+  logoSurface.addEventListener('pointercancel', resetLogo);
+  addEventListener('blur', resetLogo);
+  addEventListener('scroll', resetLogo, {passive: true});
+  function applyMotion() {
+    const off = isReduced();
+    root.dataset.siteMotion = off ? 'reduce' : 'full';
+    if (off) {
+      reveals.forEach(el => el.classList.add('is-visible'));
+      animateHeroTitle();
+      document.querySelectorAll('.bl-impact, .landing-click-pulse').forEach(el => el.remove());
+    }
+    updateControls();
+    resetLogo();
+    updateScroll();
+  }
+  systemMotion.addEventListener('change', applyMotion);
+  finePointer.addEventListener('change', resetLogo);
 })();

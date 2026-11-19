@@ -1,14 +1,9 @@
-/* SMDZ BOLDLINE UI v1.8 — real custom overlay scrollbars.
-   Portable for Chromium/CEF (FiveM/RedM) and modern browsers.
-   No library, browser-skin scrollbar, forced scroll hijacking or background loops.
-   Add data-bl-scroll to any overflow:auto/scroll element, or call SMDZBoldlineScrollbars.add(element).
-*/
 (function(){
   'use strict';
   if (window.SMDZBoldlineScrollbars) return;
   const targets = new Map();
   const supported = !!(window.PointerEvent && window.requestAnimationFrame && window.ResizeObserver);
-  if (!supported) return; // Keep styled browser scrollbars as a functional fallback.
+  if (!supported) return;
   const minThumb = 36;
   let frame = 0, pendingScan = false, counter = 0;
   const isHidden = node => !!(node.closest('[hidden]') || getComputedStyle(node).visibility==='hidden');
@@ -31,7 +26,7 @@
     const id = root ? 'bl-scroll-document' : element.id || ('bl-scroll-region-'+(++counter));
     if (!root && !element.id) element.id=id;
     if (root && !document.getElementById(id)){
-      // Controls points to actual scrollable document content without changing its layout.
+
       (document.querySelector('.app-root') || document.body).id=id;
     }
     track.setAttribute('aria-controls',id);
@@ -113,8 +108,8 @@
     const {element:el,root,axis,track,thumb}=state;
     const modal = !!document.querySelector('.overlay:not([hidden]), #detailsDrawer:not([hidden]), #confirmOverlay:not([hidden])');
     const rect=root?{top:0,bottom:innerHeight,left:0,right:innerWidth,width:innerWidth,height:innerHeight}:el.getBoundingClientRect();
-    // Hide overlay rails when their source is outside the viewport on the CROSS axis.
-    // Without this, a horizontal rail from an offscreen demo can float over unrelated cards.
+
+
     const crossOffscreen = !root && (axis==='x'
       ? (rect.bottom<=0 || rect.top>=innerHeight)
       : (rect.right<=0 || rect.left>=innerWidth));
@@ -135,7 +130,7 @@
     track.style.left=y?Math.min(innerWidth-22,Math.max(3,rect.right-22))+'px':start+'px';
     if(y){track.style.height=length+'px'; track.style.width='16px';}
     else {track.style.width=length+'px';track.style.height='16px';}
-    const trackSize=length-6; // 2px borders plus 1px padding at both ends
+    const trackSize=length-6;
     const thumbSize=Math.min(trackSize,Math.max(minThumb,trackSize*client/full));
     state.size=thumbSize;
     state.travel=Math.max(0,trackSize-thumbSize);
@@ -181,7 +176,7 @@
     document.documentElement.classList.add('bl-scrollbars-on');
     add(window,'y');
     scan();
-    // Only DOM additions + visibility changes, not animation styles or active classes.
+
     mutation.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
     window.addEventListener('resize',schedule,{passive:true});
     window.addEventListener('scroll',schedule,{passive:true});
