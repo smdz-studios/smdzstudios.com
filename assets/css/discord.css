@@ -10,8 +10,6 @@ html[data-theme=dark] .invite-page .ambient-overlay { background:linear-gradient
 .invite-logo { display:block; width:100%; height:auto; filter:drop-shadow(0 8px 16px rgba(0,0,0,.24)); transition:transform 160ms ease-out; transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)); }
 .invite-brand-icon { display:grid; place-items:center; width:60px; height:60px; background:#5865f2; color:#fff; border:3px solid #15171a; box-shadow:4px 5px 0 #15171a; border-radius:14px; transform:rotate(-7deg); margin-block:-12px 4px; }
 .invite-discord-icon { width:29px; height:29px; fill:currentColor; stroke:none; flex:none; }
-.invite-kicker { display:flex; align-items:center; gap:8px; font-weight:800; color:var(--bl-ink-muted); letter-spacing:.12em; font-size:11px; text-transform:uppercase; }
-.invite-kicker i { width:8px; height:8px; background:#ffcc28; border:1px solid #15171a; transform:rotate(-10deg); }
 .invite-content h1 { font:italic 900 clamp(37px,7vw,66px)/.99 var(--bl-font-display); text-transform:uppercase; color:var(--bl-ink); letter-spacing:-.035em; overflow-wrap:anywhere; }
 .invite-accent { color:var(--bl-accent-dark); position:relative; display:inline-block; }
 html[data-theme=dark] .invite-accent { color:#ffcc28; }
