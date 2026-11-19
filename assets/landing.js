@@ -34,6 +34,7 @@
   const savedLang = read('smdz-landing-language');
   const detectedLang = (navigator.languages?.length ? navigator.languages : [navigator.language]).map(value => String(value).toLowerCase().split(/[-_]/)[0]).find(value => Object.hasOwn(locales,value));
   let lang = Object.hasOwn(locales,savedLang) ? savedLang : detectedLang || 'en';
+  save('smdz-landing-language',lang);
   function getHeroTitleText() {
     const key = 'title' + lang.charAt(0).toUpperCase() + lang.slice(1);
     return heroTitle.dataset[key] || heroTitle.dataset.titleEn || 'Built for Roleplay.';
@@ -87,10 +88,10 @@
     document.querySelector('.footer-links').setAttribute('aria-label', t.footer);
     document.querySelector('.site-nav').setAttribute('aria-label', t.nav);
   }
-  function applyLanguage() {
+  function applyLanguage(instantTitle = false) {
     root.lang = lang;
     words.forEach(entry => { entry.node.textContent = entry[lang] ?? entry.en; });
-    const seo = {en:['FiveM & RedM Development','SMDZ Studios creates premium FiveM and RedM scripts, interfaces and custom roleplay systems. Explore the store, documentation and development services.','en_US'],es:['Desarrollo FiveM y RedM','SMDZ Studios crea scripts premium, interfaces y sistemas de roleplay personalizados para FiveM y RedM. Descubre la tienda, documentación y servicios.','es_ES'],fr:['Développement FiveM et RedM','SMDZ Studios crée des scripts premium, des interfaces et des systèmes de roleplay sur mesure pour FiveM et RedM. Découvrez la boutique et les services.','fr_FR'],de:['FiveM- und RedM-Entwicklung','SMDZ Studios entwickelt Premium-Skripte, Interfaces und individuelle Roleplay-Systeme für FiveM und RedM. Entdecke den Shop und die Dienstleistungen.','de_DE'],pt:['Desenvolvimento FiveM e RedM','A SMDZ Studios cria scripts premium, interfaces e sistemas de roleplay personalizados para FiveM e RedM. Explora a loja, a documentação e os serviços.','pt_PT'],it:['Sviluppo FiveM e RedM','SMDZ Studios crea script premium, interfacce e sistemi roleplay personalizzati per FiveM e RedM. Scopri il negozio, la documentazione e i servizi.','it_IT']}[lang];
+    const seo = {en:['FiveM & RedM Development','SMDZ Studios creates FiveM and RedM scripts, interfaces and custom roleplay systems. Explore the store, documentation and development services.','en_US'],es:['Desarrollo FiveM y RedM','SMDZ Studios crea scripts, interfaces y sistemas de roleplay personalizados para FiveM y RedM. Descubre la tienda, documentación y servicios.','es_ES'],fr:['Développement FiveM et RedM','SMDZ Studios crée des scripts, des interfaces et des systèmes de roleplay sur mesure pour FiveM et RedM. Découvrez la boutique et les services.','fr_FR'],de:['FiveM- und RedM-Entwicklung','SMDZ Studios entwickelt Skripte, Interfaces und individuelle Roleplay-Systeme für FiveM und RedM. Entdecke den Shop und die Dienstleistungen.','de_DE'],pt:['Desenvolvimento FiveM e RedM','A SMDZ Studios cria scripts, interfaces e sistemas de roleplay personalizados para FiveM e RedM. Explora a loja, a documentação e os serviços.','pt_PT'],it:['Sviluppo FiveM e RedM','SMDZ Studios crea script, interfacce e sistemi roleplay personalizzati per FiveM e RedM. Scopri il negozio, la documentazione e i servizi.','it_IT']}[lang];
     document.title = 'SMDZ Studios | ' + seo[0];
     document.querySelector('meta[name="description"]').content = seo[1];
     document.querySelector('meta[property="og:title"]').content = document.title;
@@ -98,7 +99,7 @@
     document.querySelector('meta[property="og:locale"]').content = seo[2];
     document.querySelector('meta[name="twitter:title"]').content = document.title;
     document.querySelector('meta[name="twitter:description"]').content = seo[1];
-    animateHeroTitle();
+    if (instantTitle && !root.classList.contains('intro-loading')) { ++heroTypingToken; const title = getHeroTitleText(); heroTitle.setAttribute('aria-label', title); heroTitleLine.innerHTML = createHeroTitleMarkup(title); heroTitle.classList.add('is-complete'); } else animateHeroTitle();
     updateControls();
     updateRibbon();
   }
@@ -109,10 +110,11 @@
   }
   language.addEventListener('click', () => toggleLanguages(options.hidden, options.hidden));
   choices.forEach(button => button.addEventListener('click', () => {
-    lang = button.dataset.language;
-    save('smdz-landing-language',lang);
-    applyLanguage();
+    const next = button.dataset.language;
     toggleLanguages(false, true);
+    if (next === lang) { save('smdz-landing-language',lang); return; }
+    const change = () => { lang = next; save('smdz-landing-language',lang); applyLanguage(true); };
+    if (window.smdzLanguageChange) window.smdzLanguageChange(change); else change();
   }));
   document.addEventListener('click', e => { if (!e.target.closest('.language-picker')) toggleLanguages(false); });
   document.querySelector('.language-picker').addEventListener('keydown', e => {
@@ -128,7 +130,7 @@
     if (e.relatedTarget && !e.currentTarget.contains(e.relatedTarget)) toggleLanguages(false);
   });
   document.addEventListener('dragstart', e => e.preventDefault());
-  document.addEventListener('selectstart', e => e.preventDefault());
+  document.addEventListener('selectstart', e => { if (!e.target.closest('input,textarea')) e.preventDefault(); });
   function showImpact(e, keyboard = false) {
     if (isReduced()) return;
     const host = e.target.closest('.btn, .language-options button');
@@ -183,17 +185,15 @@
   });
   window.addEventListener('smdz:intro-ready', () => animateHeroTitle(560), {once:true});
   applyLanguage();
-
-  const reveals = [...document.querySelectorAll('[data-reveal]')];
-  if ('IntersectionObserver' in window && !isReduced()) {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
-      });
-    }, {threshold: .12});
-    root.classList.add('motion-ready');
-    reveals.forEach(element => observer.observe(element));
+  function syncPreferences() {
+    const savedTheme=read('smdz-bl-theme'),savedLanguage=read('smdz-landing-language');
+    if (savedTheme==='light'||savedTheme==='dark') root.dataset.theme=savedTheme;
+    if (Object.hasOwn(locales,savedLanguage)&&savedLanguage!==lang) { lang=savedLanguage; applyLanguage(true); }
+    else updateControls();
   }
+  window.addEventListener('storage',event=>{if(event.key===null||event.key==='smdz-bl-theme'||event.key==='smdz-landing-language')syncPreferences();});
+  window.addEventListener('pageshow',event=>{if(event.persisted)syncPreferences();});
+
   let queued = false;
   function updateScroll() {
     const offset = Math.max(0, window.scrollY);
@@ -247,7 +247,6 @@
     const off = isReduced();
     root.dataset.siteMotion = off ? 'reduce' : 'full';
     if (off) {
-      reveals.forEach(el => el.classList.add('is-visible'));
       animateHeroTitle();
       document.querySelectorAll('.bl-impact, .landing-click-pulse').forEach(el => el.remove());
     }

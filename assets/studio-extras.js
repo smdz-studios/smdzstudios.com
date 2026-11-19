@@ -3,6 +3,20 @@
   const root = document.documentElement;
   const clock = document.getElementById('madrid-time');
   const zone = document.getElementById('madrid-zone');
+  const period=document.getElementById('madrid-period');
+  const periodCopy={en:['Day in Madrid','Night in Madrid'],es:['Día en Madrid','Noche en Madrid'],fr:['Jour à Madrid','Nuit à Madrid'],de:['Tag in Madrid','Nacht in Madrid'],pt:['Dia em Madrid','Noite em Madrid'],it:['Giorno a Madrid','Notte a Madrid']};
+  const dayIcon='<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>';
+  const nightIcon='<path d="M20.9 13.35A9 9 0 0 1 10.65 3.1 9 9 0 1 0 20.9 13.35Z"/>';
+  function isDaylight(date){
+    const rad=Math.PI/180, day=(date.getTime()-Date.UTC(date.getUTCFullYear(),0,1))/86400000;
+    const gamma=2*Math.PI/365*(day-.5);
+    const equation=229.18*(.000075+.001868*Math.cos(gamma)-.032077*Math.sin(gamma)-.014615*Math.cos(2*gamma)-.040849*Math.sin(2*gamma));
+    const decl=.006918-.399912*Math.cos(gamma)+.070257*Math.sin(gamma)-.006758*Math.cos(2*gamma)+.000907*Math.sin(2*gamma)-.002697*Math.cos(3*gamma)+.00148*Math.sin(3*gamma);
+    const solarMinutes=((date.getUTCHours()*60+date.getUTCMinutes()+date.getUTCSeconds()/60+equation+4*(-3.7038))%1440+1440)%1440;
+    const latitude=40.4168*rad, angle=(solarMinutes/4-180)*rad;
+    const altitude=Math.asin(Math.sin(latitude)*Math.sin(decl)+Math.cos(latitude)*Math.cos(decl)*Math.cos(angle));
+    return altitude>=-.833*rad;
+  }
   let clockFormat, zoneFormat, clockLang, clockTimer;
   function updateClock() {
     clearTimeout(clockTimer);
@@ -15,6 +29,7 @@
     const now = new Date();
     clock.textContent = clockFormat.format(now);
     clock.dateTime = now.toISOString();
+    if(period){const day=isDaylight(now),name=day?'day':'night';if(period.dataset.period!==name){period.dataset.period=name;period.innerHTML=day?dayIcon:nightIcon;}period.setAttribute('aria-label',(periodCopy[lang]||periodCopy.en)[day?0:1]);}
     const offset = zoneFormat.formatToParts(now).find(part => part.type === 'timeZoneName');
     zone.textContent = 'Europe/Madrid' + (offset ? ' · ' + offset.value : '');
     if (!document.hidden) clockTimer = setTimeout(updateClock, 1000 - now.getMilliseconds() + 12);

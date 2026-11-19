@@ -2,23 +2,10 @@
   'use strict';
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const ns='http://www.w3.org/2000/svg';
-  const pending=new Set();
-  const finish=section=>{section.classList.remove('draw-pending','draw-running');pending.delete(section);};
-  if('IntersectionObserver' in window&&!reduce.matches){
-    const observer=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
-      if(!isIntersecting)return;
-      observer.unobserve(target);
-      target.classList.remove('draw-pending');target.classList.add('draw-running');
-      setTimeout(()=>finish(target),950);
-    }),{threshold:.22});
-    document.querySelectorAll('#studio,#custom-work').forEach(section=>{
-      if(getComputedStyle(section).position==='static')section.style.position='relative';
-      const svg=document.createElementNS(ns,'svg');svg.classList.add('draw-border');svg.setAttribute('aria-hidden','true');
-      const rect=document.createElementNS(ns,'rect');rect.setAttribute('pathLength','100');svg.append(rect);section.append(svg);
-      section.classList.add('draw-pending');pending.add(section);observer.observe(section);
-    });
-    reduce.addEventListener('change',()=>{if(reduce.matches){observer.disconnect();pending.forEach(finish);}});
-  }
+  document.querySelectorAll('#studio,#custom-work').forEach(section=>{
+    const svg=document.createElementNS(ns,'svg');svg.classList.add('draw-border');svg.setAttribute('aria-hidden','true');
+    const rect=document.createElementNS(ns,'rect');rect.setAttribute('pathLength','100');svg.append(rect);section.append(svg);
+  });
   document.querySelectorAll('.site-nav .btn,.custom-contact').forEach(btn=>{const span=document.createElement('span');span.className='button-sweep';span.setAttribute('aria-hidden','true');btn.append(span);});
   const logo=document.querySelector('.logo-parallax');
   let count=0,last=0,burst=null,timer=0;
