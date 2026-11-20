@@ -1,0 +1,45 @@
+name: SMDZ Service Monitor
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: smdz-uptime-data
+  cancel-in-progress: false
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load history branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="$RUNNER_TEMP/uptime-data"
+          set +e
+          git ls-remote --exit-code --heads origin refs/heads/uptime-data >/dev/null
+          result=$?
+          set -e
+          if [ "$result" -eq 0 ]; then
+            git fetch origin refs/heads/uptime-data
+            git worktree add --detach "$target" FETCH_HEAD
+          elif [ "$result" -eq 2 ]; then
+            git worktree add --detach "$target" HEAD
+            git -C "$target" switch --orphan uptime-data
+          else
+            exit "$result"
+          fi
+      - name: Probe services and publish history
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="$RUNNER_TEMP/uptime-data"
+          python3 tools/uptime-monitor.py assets/data/status-config.json "$target/history.json"
+          git -C "$target" config user.name 'github-actions[bot]'
+          git -C "$target" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$target" add history.json
+          git -C "$target" commit -m 'Update measured service history'
+          git -C "$target" push origin HEAD:refs/heads/uptime-data

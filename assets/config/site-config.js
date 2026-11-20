@@ -4,5 +4,18 @@ window.SMDZ_SITE_CONFIG = Object.freeze({
   // closed — Agenda cerrada — Rojo
   // inquire — Consultar disponibilidad — Amarillo
   customWorkAvailability: 'available',
-  publicSiteUrl: 'https://smdzstudios.com/'
+  publicSiteUrl: 'https://smdzstudios.com/',
+  // true: maintenance screen on Home, Discord and 404; false: normal navigation. Status stays accessible.
+  maintenance: {
+    enabled: false,
+    message: {
+      en: 'We are working on improvements. Please check back soon.',
+      es: 'Estamos trabajando en mejoras. Vuelve a visitarnos pronto.',
+      fr: 'Nous travaillons sur des améliorations. Revenez bientôt.',
+      de: 'Wir arbeiten an Verbesserungen. Schau bald wieder vorbei.',
+      pt: 'Estamos a trabalhar em melhorias. Volta em breve.',
+      it: 'Stiamo lavorando a dei miglioramenti. Torna presto.'
+    }
+  },
+  uptimeDataUrl: 'https://raw.githubusercontent.com/smdz-studios/smdzstudios.com/uptime-data/history.json'
 });

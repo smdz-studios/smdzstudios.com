@@ -1,6 +1,6 @@
 {
-  "landing": "./assets/data/health.json",
-  "store": "https://smdz-studios.tebex.io/",
-  "docs": "https://docs.smdz-studios.com/",
-  "discord": null
+  "landing": {"url":"https://smdzstudios.com/"},
+  "store": {"url":"https://smdz-studios.tebex.io/"},
+  "docs": {"url":"https://docs.smdz-studios.com/"},
+  "discord": {"url":"https://discord.com/api/v10/invites/6HPcHR4N8m?with_counts=true","invite":"6HPcHR4N8m"}
 }

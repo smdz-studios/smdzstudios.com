@@ -107,11 +107,9 @@
     updateRibbon();
   }
   function toggleLanguages(open, focus = false) {
-    options.hidden = !open;
-    language.setAttribute('aria-expanded', String(open));
-    if (focus) (open ? choices.find(b => b.dataset.language === lang) : language).focus();
+    window.smdzToggleLanguageMenu(options,language,open,focus?(open?choices.find(b=>b.dataset.language===lang):language):null);
   }
-  language.addEventListener('click', () => toggleLanguages(options.hidden, options.hidden));
+  language.addEventListener('click', () => toggleLanguages(language.getAttribute('aria-expanded')!=='true', language.getAttribute('aria-expanded')!=='true'));
   choices.forEach(button => button.addEventListener('click', () => {
     const next = button.dataset.language;
     toggleLanguages(false, true);
@@ -121,10 +119,10 @@
   }));
   document.addEventListener('click', e => { if (!e.target.closest('.language-picker')) toggleLanguages(false); });
   document.querySelector('.language-picker').addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !options.hidden) { e.preventDefault(); toggleLanguages(false, true); }
+    if (e.key === 'Escape' && language.getAttribute('aria-expanded')==='true') { e.preventDefault(); toggleLanguages(false, true); }
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      if (options.hidden) { toggleLanguages(true, true); return; }
+      if (language.getAttribute('aria-expanded')!=='true') { toggleLanguages(true, true); return; }
       const index = choices.indexOf(document.activeElement);
       choices[(index + (e.key === 'ArrowDown' ? 1 : -1) + choices.length) % choices.length].focus();
     }

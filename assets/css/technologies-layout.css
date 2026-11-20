@@ -40,3 +40,9 @@
 @media(max-width:720px){#technologies.studio-technologies.panel{width:calc(100% - 36px);margin-bottom:32px;}#technologies .tech-logo{width:60px;height:60px;padding:10px;} .studio.panel{row-gap:26px}.studio-disciplines > .discipline-row{grid-template-columns:46px minmax(0,1fr) auto;gap:10px}.discipline-symbol{width:42px;height:42px}.discipline-symbol .icon{width:22px;height:22px}}
 @media(max-width:480px){#technologies .tech-list,#technologies .tech-group:nth-child(2) .tech-list,#technologies .tech-modeling .tech-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 10px;}#technologies .tech-logo{width:64px;height:64px;} }
 @media(prefers-reduced-motion:reduce){#technologies .tech-logo{transition:none;}#technologies .tech-item:hover .tech-logo{transform:none;} }
+
+
+#technologies .tech-item{overflow:hidden;}
+#technologies .tech-item .tech-name,#technologies .tech-item .tech-role{max-width:100%;}
+#technologies .tech-logo img[src*="sollumz"]{width:auto;height:auto;max-width:30px;max-height:24px;transform:scale(.96);transform-origin:center;}
+@media(max-width:480px){#technologies .tech-logo img[src*="sollumz"]{max-width:28px;max-height:22px;}}
