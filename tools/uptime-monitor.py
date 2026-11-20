@@ -28,17 +28,54 @@ def validate_worker_probe(kind, payload):
     return 'unknown', None
 
 
+def validate_tebex_status(payload, components):
+    if not isinstance(payload, dict) or not isinstance(payload.get('data'), dict):
+        return 'unknown', None
+    page = payload['data']
+    if page.get('type') != 'status_page' or not isinstance(page.get('attributes'), dict):
+        return 'unknown', None
+    rows = payload.get('included')
+    if not isinstance(rows, list):
+        return 'unknown', None
+    found = {}
+    for row in rows:
+        if not isinstance(row, dict) or row.get('type') != 'status_page_resource':
+            continue
+        attrs = row.get('attributes')
+        if not isinstance(attrs, dict) or attrs.get('public_name') not in components:
+            continue
+        name = attrs['public_name']
+        if name in found:
+            return 'unknown', None
+        state = attrs.get('status')
+        if state not in ('operational', 'degraded', 'downtime', 'maintenance', 'not_monitored') or attrs.get('status_not_updated_since'):
+            state = 'unknown'
+        found[name] = state
+    if set(found) != set(components):
+        return 'unknown', None
+    values = set(found.values())
+    state = 'failed' if 'downtime' in values else 'degraded' if 'degraded' in values else 'unknown' if values & {'unknown', 'not_monitored'} else 'maintenance' if 'maintenance' in values else 'up'
+    return state, {'source': 'tebex_official', 'components': found}
+
+
 def probe(service):
     started = time.monotonic()
     code = None
     state = 'failed'
     metadata = None
     try:
-        req = urllib.request.Request(service['url'], headers={'User-Agent': 'SMDZ-Studios-Uptime/1.1', 'Accept': 'application/json' if 'invite' in service or service.get('json_probe') else 'text/html,*/*'})
+        req = urllib.request.Request(service['url'], headers={'User-Agent': 'SMDZ-Studios-Uptime/1.1', 'Accept': 'application/json' if 'invite' in service or service.get('json_probe') or service.get('status_probe') else 'text/html,*/*'})
         with urllib.request.urlopen(req, timeout=15) as response:
             code = response.status
             state = http_state(code, response.headers)
-            if service.get('json_probe') and state == 'up':
+            if service.get('status_probe') == 'tebex':
+                state = 'unknown'
+                if 200 <= code < 300 and http_state(code, response.headers) == 'up':
+                    try:
+                        state, metadata = validate_tebex_status(json.loads(response.read(4_000_000)), service['components'])
+                    except (ValueError, TypeError):
+                        pass
+            elif service.get('json_probe') and state == 'up':
                 try:
                     payload = json.loads(response.read(262144))
                     state, metadata = validate_worker_probe(service['json_probe'], payload)
@@ -57,6 +94,8 @@ def probe(service):
         state = http_state(code, exc.headers)
     except (OSError, ValueError):
         state = 'failed'
+    if service.get('status_probe') == 'tebex' and metadata is None:
+        state = 'unknown'
     sample = [state, round((time.monotonic()-started)*1000), code]
     return sample + [metadata] if metadata is not None else sample
 
@@ -70,7 +109,7 @@ def main():
         raise ValueError('Invalid existing history')
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
         results = dict(zip(config, executor.map(probe, config.values())))
-    services = {}
+    services = {name: [sample for sample in rows if now-90*86400 <= sample[0] <= now] for name, rows in previous['services'].items() if name not in config and isinstance(rows, list)}
     for name, result in results.items():
         samples = [sample for sample in previous['services'].get(name, []) if now-90*86400 <= sample[0] <= now]
         if samples and samples[-1][0] == now:

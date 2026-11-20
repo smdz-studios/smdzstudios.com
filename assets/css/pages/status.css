@@ -104,3 +104,10 @@
 
 .uptime-period{flex-wrap:wrap;justify-content:flex-end;max-width:100%;}.uptime-period .btn{white-space:nowrap;}
 @media(max-width:620px){.uptime-period{justify-content:flex-start;gap:6px;}.uptime-period .btn{padding-inline:9px;}}
+
+[data-segment=degraded],[data-metric=degraded]{--state-color:#ffcc28;}
+[data-segment=maintenance],[data-metric=maintenance]{--state-color:#a78bfa;}
+.uptime-day[data-state=degraded],.uptime-key i[data-state=degraded],.uptime-current[data-state=degraded]::before{background:#ffcc28;}
+.uptime-day[data-state=maintenance],.uptime-key i[data-state=maintenance],.uptime-current[data-state=maintenance]::before{background:#a78bfa;}
+.uptime-official-link{color:var(--bl-ink);text-decoration:underline;text-underline-offset:3px;}
+.uptime-official-link:hover{color:#ffcc28;}

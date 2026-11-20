@@ -2,9 +2,13 @@
   "landing": {
     "url": "https://smdzstudios.com/"
   },
-  "store": {
-    "url": "https://smdz-studios.tebex.io/",
-    "page_probe": true
+  "tebex": {
+    "url": "https://status.tebex.io/index.json",
+    "status_probe": "tebex",
+    "components": [
+      "Webstores",
+      "Checkout"
+    ]
   },
   "docs": {
     "url": "https://docs.smdz-studios.com/"
