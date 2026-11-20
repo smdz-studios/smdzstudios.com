@@ -4,8 +4,8 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const home=!!document.getElementById('home');
   const introTargets=home?[...document.querySelectorAll('.studio-ribbon,.site-header,.hero [data-enter]')]:[];
-  const panels=[...document.querySelectorAll('[data-reveal],.status-heading,.status-overview,.status-list-heading,.service-row,.status-bottom,.error-panel,.error-footer')];
-  const groups=['.studio-intro > *','.studio-disciplines > h3,.discipline-row','.tech-heading,.tech-group h3,.tech-item','.custom-body > *','.custom-art','.footer-brand-block,.footer-column,.footer-bottom','.status-heading-copy > *','.status-toolbar,.status-ring,.status-legend-row','.service-copy,.service-bottom','.error-panel > *'];
+  const panels=[...document.querySelectorAll('[data-reveal],.status-heading,.status-overview,.status-bottom,.error-panel,.error-footer')];
+  const groups=['.studio-intro > *','.studio-disciplines > h3,.discipline-row','.tech-heading,.tech-group h3,.tech-item','.custom-body > *','.custom-art','.footer-brand-block,.footer-column,.footer-bottom','.status-heading-copy > *','.status-toolbar,.status-ring,.status-legend-row','.error-panel > *'];
   const detailTargets=[...new Set(groups.flatMap(selector=>[...document.querySelectorAll(selector)]))];
   const details=new Set(detailTargets);
   const stages=new Map();

@@ -105,6 +105,7 @@
     if (instantTitle && !root.classList.contains('intro-loading')) { ++heroTypingToken; const title = getHeroTitleText(); heroTitle.setAttribute('aria-label', title); heroTitleLine.innerHTML = createHeroTitleMarkup(title); heroTitle.classList.add('is-complete'); } else animateHeroTitle();
     updateControls();
     updateRibbon();
+    document.querySelector('.section-dots')?.setAttribute('aria-label',({en:'Page sections',es:'Secciones de la página',fr:'Sections de la page',de:'Seitenabschnitte',pt:'Secções da página',it:'Sezioni della pagina'})[lang]);
   }
   function toggleLanguages(open, focus = false) {
     window.smdzToggleLanguageMenu(options,language,open,focus?(open?choices.find(b=>b.dataset.language===lang):language):null);

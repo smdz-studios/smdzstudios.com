@@ -375,7 +375,6 @@ html[data-theme=dark] .footer-location .icon { color:var(--bl-accent); }
 @media(prefers-reduced-motion:reduce){.language-options,.language-options button{animation:none!important;}}
 
 
-/* simplified ribbon edges */
 .ribbon-tail{display:none!important;}
 .studio-ribbon{padding-inline:8px;}
 @media(max-width:720px){.studio-ribbon{padding-inline:6px;}}

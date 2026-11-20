@@ -1,14 +1,15 @@
 (() => {
   'use strict';
   const root=document.documentElement,button=document.getElementById('refresh-status'),stamp=document.getElementById('status-time');
-  const rows=[...document.querySelectorAll('[data-service]')];
+  const services=[{key:'landing',name:'SMDZ Studios'},{key:'store',name:{en:'Tebex Store',es:'Tienda Tebex',fr:'Boutique Tebex',de:'Tebex-Shop',pt:'Loja Tebex',it:'Negozio Tebex'}},{key:'docs',name:{en:'Documentation',es:'Documentación',fr:'Documentation',de:'Dokumentation',pt:'Documentação',it:'Documentazione'}},{key:'discord',name:'Discord'}];
+  const states=new Map(services.map(({key})=>[key,'unknown']));
   const copy={en:['Checking','Reachable','Unverified','Check failed','Last checked','Checking services…'],es:['Comprobando','Accesible','Sin verificar','Comprobación fallida','Última comprobación','Comprobando servicios…'],fr:['Vérification','Accessible','Non vérifié','Échec de vérification','Dernière vérification','Vérification des services…'],de:['Wird geprüft','Erreichbar','Nicht geprüft','Prüfung fehlgeschlagen','Letzte Prüfung','Dienste werden geprüft…'],pt:['A verificar','Acessível','Não verificado','Falha na verificação','Última verificação','A verificar serviços…'],it:['Verifica in corso','Raggiungibile','Non verificato','Verifica non riuscita','Ultima verifica','Verifica dei servizi…']};
   const keys={checking:0,up:1,unknown:2,failed:3};
   let last=null,busy=false;
   const chartKeys=['up','unknown','failed','checking'];
   function render(){
-    const lang=root.lang in copy?root.lang:'en',t=copy[lang],total=rows.length,counts={up:0,unknown:0,failed:0,checking:0};
-    rows.forEach(row=>{const el=row.querySelector('.service-indicator'),state=Object.hasOwn(counts,el.dataset.state)?el.dataset.state:'unknown';counts[state]++;el.querySelector('.state-label').textContent=t[keys[state]];});
+    const lang=root.lang in copy?root.lang:'en',t=copy[lang],total=services.length,counts={up:0,unknown:0,failed:0,checking:0};
+    services.forEach(({key})=>{const state=states.get(key);counts[Object.hasOwn(counts,state)?state:'unknown']++;});
     const format=new Intl.NumberFormat(lang,{style:'percent',maximumFractionDigits:1});
     let offset=0;
     for(const key of chartKeys){
@@ -43,10 +44,10 @@
     const note=document.getElementById('uptime-empty');note.textContent=loadFailed?t[8]:!history?t[7]:now-history.updated>45*60?t[9]:'';note.hidden=!note.textContent;
     document.getElementById('maintenance-status').hidden=window.SMDZ_SITE_CONFIG?.maintenance?.enabled!==true;
     historyRows.replaceChildren();incidentList.replaceChildren();let incidents=[],any=false;
-    for(const row of rows){
-      const key=row.dataset.service,name=row.querySelector('h3').textContent,all=history?.services?.[key]||[],samples=all.filter(x=>x[0]>=start&&x[0]<=now),known=samples.filter(x=>x[1]==='up'||x[1]==='failed'),success=known.filter(x=>x[1]==='up');any ||= samples.length>0;
+    for(const service of services){
+      const key=service.key,name=typeof service.name==='string'?service.name:service.name[lang],all=history?.services?.[key]||[],samples=all.filter(x=>x[0]>=start&&x[0]<=now),known=samples.filter(x=>x[1]==='up'||x[1]==='failed'),success=known.filter(x=>x[1]==='up');any ||= samples.length>0;
       const line=make('article','uptime-service'),head=make('div','uptime-service-head'),nameNode=make('h3','',name),summary=make('div','uptime-summary');
-      summary.append(make('span','',t[3]),make('strong','',known.length?pct.format(success.length/known.length):'—'),make('span','',`${num.format(known.length)}/${num.format(samples.length)} ${t[13]}`),make('span','',`${t[4]}: ${success.length?num.format(Math.round(success.reduce((a,x)=>a+x[2],0)/success.length))+' ms':'—'}`));head.append(nameNode,summary);line.append(head);
+      summary.append(make('span','',t[3]),make('strong','',known.length?pct.format(success.length/known.length):'—'),make('span','',`${num.format(known.length)}/${num.format(samples.length)} ${t[13]}`),make('span','',`${t[4]}: ${success.length?num.format(Math.round(success.reduce((a,x)=>a+x[2],0)/success.length))+' ms':'—'}`));const identity=make('div','uptime-service-identity'),state=states.get(key)||'unknown',indicator=make('span','uptime-current',copy[lang][keys[state]]);indicator.dataset.state=state;identity.append(nameNode,indicator);head.append(identity,summary);line.append(head);
       const days=Array.from({length:period},()=>[]);for(const x of samples){const i=Math.floor((x[0]-start)/86400);if(days[i])days[i].push(x);}
       const bars=make('div','uptime-bars');bars.style.setProperty('--days',period);bars.setAttribute('role','img');bars.setAttribute('aria-label',`${name}: ${t[3]} ${known.length?pct.format(success.length/known.length):t[12]}`);
       days.forEach((day,i)=>{const up=day.filter(x=>x[1]==='up').length,fail=day.filter(x=>x[1]==='failed').length,unknown=day.length-up-fail,bar=make('span','uptime-day');bar.dataset.state=fail?(up?'mixed':'failed'):up?(unknown?'partial':'up'):unknown?'unknown':'empty';bar.title=`${dayFormat.format(new Date((start+i*86400)*1000))} · ${up+fail?pct.format(up/(up+fail)):t[12]} · ${day.length} ${t[13]}`;bars.append(bar);});line.append(bars);
@@ -58,8 +59,8 @@
     }
     incidents.sort((a,b)=>b.start-a.start);if(!incidents.length)incidentList.append(make('p','uptime-note',any?t[6]:t[7]));else incidents.slice(0,12).forEach(item=>{const li=make('div','uptime-incident');li.append(make('strong','',item.name),make('span','',`${t[10]}: ${dateFormat.format(new Date(item.start*1000))}`),make('span','',item.end?`${t[11]}: ${dateFormat.format(new Date(item.end*1000))}`:t[17]));incidentList.append(li);});
   }
-  function validData(data){return data?.version===1&&Number.isFinite(data.updated)&&data.services&&rows.every(row=>Array.isArray(data.services[row.dataset.service])&&data.services[row.dataset.service].every(x=>Array.isArray(x)&&Number.isFinite(x[0])&&['up','failed','unknown'].includes(x[1])&&Number.isFinite(x[2])));}
-  async function refresh(){if(busy)return;busy=true;button.disabled=true;rows.forEach(row=>row.querySelector('.service-indicator').dataset.state='checking');render();loadFailed=false;try{const url=window.SMDZ_SITE_CONFIG?.uptimeDataUrl;if(!url)throw Error();const res=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(10000)});if(res.status===404){history=null;last=null;}else if(!res.ok)throw Error();if(res.status===404){loadFailed=false;}else{const data=await res.json();if(!validData(data))throw Error();history=data;last=new Date(data.updated*1000);}}catch{loadFailed=true;}const now=Date.now()/1000;rows.forEach(row=>{const sample=history?.services?.[row.dataset.service]?.at(-1);row.querySelector('.service-indicator').dataset.state=sample&&now-sample[0]<=45*60?sample[1]:'unknown';});busy=false;button.disabled=false;render();drawHistory();}
+  function validData(data){return data?.version===1&&Number.isFinite(data.updated)&&data.services&&services.every(({key})=>Array.isArray(data.services[key])&&data.services[key].every(x=>Array.isArray(x)&&Number.isFinite(x[0])&&['up','failed','unknown'].includes(x[1])&&Number.isFinite(x[2])));}
+  async function refresh(){if(busy)return;busy=true;button.disabled=true;services.forEach(({key})=>states.set(key,'checking'));render();drawHistory();loadFailed=false;try{const url=window.SMDZ_SITE_CONFIG?.uptimeDataUrl;if(!url)throw Error();const res=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(10000)});if(res.status===404){history=null;last=null;}else if(!res.ok)throw Error();if(res.status===404){loadFailed=false;}else{const data=await res.json();if(!validData(data))throw Error();history=data;last=new Date(data.updated*1000);}}catch{loadFailed=true;}const now=Date.now()/1000;services.forEach(({key})=>{const sample=history?.services?.[key]?.at(-1);states.set(key,sample&&now-sample[0]<=45*60?sample[1]:'unknown');});busy=false;button.disabled=false;render();drawHistory();}
   historyPanel.querySelectorAll('[data-period]').forEach(el=>el.addEventListener('click',()=>{period=Number(el.dataset.period);drawHistory();}));
   new MutationObserver(()=>{render();drawHistory();}).observe(root,{attributes:true,attributeFilter:['lang']});button.addEventListener('click',refresh);drawHistory();refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);
 })();

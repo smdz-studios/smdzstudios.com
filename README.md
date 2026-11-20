@@ -42,7 +42,7 @@ For local development, open this folder in VS Code and launch `index.html` using
 ## Configuration
 
 - `assets/config/site-config.js`: public URL and custom work availability (`available`, `limited`, `closed`, `inquire`). Current setting: available.
-- `assets/data/status-config.json`: service probe endpoints. `assets/data/health.json` is the local health response. External browser probes may be blocked by CORS; unverified does not mean down. The status donut chart reflects the current browser check, including in-progress checks, not historical uptime. This is not historical or server-side uptime monitoring. Cfx.re is not monitored.
+- `assets/data/status-config.json`: service probe endpoints. `assets/data/health.json` is the local health response. The status donut chart reflects the latest external monitor samples, including refreshes in progress. Current service states are displayed directly alongside their uptime history, with no duplicate service cards. Unverified does not mean down. Cfx.re is not monitored.
 - `sw.js`: update cache version when releasing changed cached assets. Health/config JSON requests bypass the service worker cache.
 - `tools/configure-domain.py`: optional home metadata helper only; the production domain is already configured. If changing domain, also update CNAME, sitemap, robots, status metadata and site settings manually.
 
@@ -73,3 +73,11 @@ The independent technologies panel uses `assets/css/technologies-layout.css`. St
 - Upload **all** files, including the hidden `.github/workflows/uptime.yml` folder, to `main`. Enable GitHub Actions if needed. In Actions → SMDZ Service Monitor → Run workflow, select `main` and run it once. The workflow creates/updates the `uptime-data` branch with `history.json`. Do not replace or delete that branch on future uploads. The current GitHub Pages deployment configuration stays unchanged. GitHub Actions needs repository contents write permission (declared in the workflow).
 - The runner checks four public endpoints every 15 minutes, including the Discord invite API, not the Discord platform as a whole. HTTP 401/403/429 are unverified rather than outages. No Cfx.re checks. Uptime is successful / conclusive samples, not continuous availability. Latency is successful request response time from the runner. No fabricated history; 30/90 UTC-day charts fill as checks arrive. Missing intervals are not treated as successes; stale results are unverified after 45 minutes. Incidents represent observed failure and recovery checks, not exact outage times.
 - The status UI reads the public JSON from `raw.githubusercontent.com` using `uptimeDataUrl`; brief CDN delays are possible. GitHub scheduled workflows can be delayed or disabled after 60 days of inactivity; check Actions if monitoring stops. No new repository, DNS change, API token or external paid monitor is required for this setup on the public repository.
+
+## Custom HTTP error pages
+
+The root `404.html` is automatically served by GitHub Pages for missing paths. Additional branded templates are available in `errors/` for HTTP 400, 401, 403, 405, 408, 410, 429, 500, 502, 503 and 504. They share the 404 layout, existing local assets, six translations, theme and language preferences, reduced-motion support, quick commands and page transitions. All are marked noindex.
+
+GitHub Pages only offers a custom missing-page (404) handler; direct requests to `/errors/503.html` and the other templates normally return HTTP 200. These are visual templates, not actual server error handlers. A server or reverse proxy that supports custom error responses can use them with the appropriate HTTP status, serving the assets independently; the additional templates expect to be served at `/errors/<code>.html`. No DNS or GitHub Actions changes are necessary. The existing maintenance gate remains in effect.
+
+Error pages use their own localized HTTP title and description. The service monitor uses actions/checkout@v5 (Node.js 24); the existing uptime-data branch is unchanged.
