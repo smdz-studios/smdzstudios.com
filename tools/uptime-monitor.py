@@ -117,7 +117,7 @@ def main():
         samples.append([now, *result])
         services[name] = samples
         print(name, *result)
-    data = {'version': 1, 'updated': now, 'intervalMinutes': 30, 'services': services}
+    data = {'version': 1, 'updated': now, 'intervalMinutes': 10, 'services': services}
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix('.tmp')
     temporary.write_text(json.dumps(data, separators=(',', ':'))+'\n')

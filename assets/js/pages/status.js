@@ -13,6 +13,14 @@
   const periodCopy={"en": ["24 hours", "7 days", "14 days", "30 days", "90 days", "Hourly intervals (UTC) · measured availability excludes missing and inconclusive checks. Scheduled checks may be delayed.", "Responds · Access restricted", "The server responded HTTP 403; storefront loading could not be verified.", "Mixed interval", "Measurements collected in this UTC interval."], "es": ["24 horas", "7 días", "14 días", "30 días", "90 días", "Intervalos de una hora (UTC) · la disponibilidad medida excluye comprobaciones ausentes o no concluyentes. Las comprobaciones pueden retrasarse.", "Responde · Acceso restringido", "El servidor respondió HTTP 403; no se pudo verificar la carga de la tienda.", "Intervalo mixto", "Mediciones recogidas durante este intervalo UTC."], "fr": ["24 heures", "7 jours", "14 jours", "30 jours", "90 jours", "Intervalles horaires (UTC) · les vérifications absentes ou non concluantes sont exclues. Les vérifications peuvent être retardées.", "Répond · Accès restreint", "Le serveur a répondu HTTP 403 ; le chargement de la boutique n’a pas pu être vérifié.", "Intervalle mixte", "Mesures recueillies pendant cet intervalle UTC."], "de": ["24 Stunden", "7 Tage", "14 Tage", "30 Tage", "90 Tage", "Stundenintervalle (UTC) · fehlende und nicht eindeutige Prüfungen werden ausgeschlossen. Prüfungen können sich verzögern.", "Antwortet · Zugriff beschränkt", "Der Server antwortete mit HTTP 403; das Laden des Shops konnte nicht geprüft werden.", "Gemischtes Intervall", "Messungen in diesem UTC-Intervall."], "pt": ["24 horas", "7 dias", "14 dias", "30 dias", "90 dias", "Intervalos horários (UTC) · verificações ausentes ou inconclusivas são excluídas. As verificações podem atrasar-se.", "Responde · Acesso restrito", "O servidor respondeu HTTP 403; não foi possível verificar o carregamento da loja.", "Intervalo misto", "Medições recolhidas neste intervalo UTC."], "it": ["24 ore", "7 giorni", "14 giorni", "30 giorni", "90 giorni", "Intervalli orari (UTC) · le verifiche mancanti o inconcludenti sono escluse. Le verifiche possono subire ritardi.", "Risponde · Accesso limitato", "Il server ha risposto HTTP 403; non è stato possibile verificare il caricamento del negozio.", "Intervallo misto", "Misurazioni raccolte in questo intervallo UTC."]};
   const periodValues=[1,7,14,30,90,180,365];
   const longPeriodCopy={en:["180 days","365 days","Weekly intervals (UTC) · missing and inconclusive checks are excluded. Scheduled checks may be delayed."],es:["180 días","365 días","Intervalos semanales (UTC) · se excluyen las comprobaciones ausentes o no concluyentes. Las comprobaciones pueden retrasarse."],fr:["180 jours","365 jours","Intervalles hebdomadaires (UTC) · les vérifications absentes ou non concluantes sont exclues. Des retards sont possibles."],de:["180 Tage","365 Tage","Wochenintervalle (UTC) · fehlende und nicht eindeutige Prüfungen werden ausgeschlossen. Verzögerungen sind möglich."],pt:["180 dias","365 dias","Intervalos semanais (UTC) · as verificações ausentes ou inconclusivas são excluídas. Podem ocorrer atrasos."],it:["180 giorni","365 giorni","Intervalli settimanali (UTC) · le verifiche mancanti o inconcludenti sono escluse. Sono possibili ritardi."]};
+  const coverageCopy={
+    en:['Data coverage','of','intervals with measurements','Before monitoring began','No measurement recorded in this interval','Monitoring history began','Scheduled executions may be delayed or omitted'],
+    es:['Cobertura de datos','de','intervalos con mediciones','El monitor aún no había comenzado','No se registró ninguna medición en este intervalo','El historial comenzó','Las ejecuciones programadas pueden retrasarse u omitirse'],
+    fr:['Couverture des données','sur','intervalles mesurés','La surveillance n’avait pas encore commencé','Aucune mesure enregistrée sur cet intervalle','Début de l’historique','Les exécutions planifiées peuvent être retardées ou omises'],
+    de:['Datenabdeckung','von','Intervallen mit Messungen','Die Überwachung hatte noch nicht begonnen','Keine Messung in diesem Intervall aufgezeichnet','Beginn des Verlaufs','Geplante Ausführungen können verspätet erfolgen oder ausfallen'],
+    pt:['Cobertura de dados','de','intervalos com medições','A monitorização ainda não tinha começado','Sem medição registada neste intervalo','O histórico começou','As execuções agendadas podem atrasar-se ou falhar'],
+    it:['Copertura dati','di','intervalli con misurazioni','Il monitoraggio non era ancora iniziato','Nessuna misurazione registrata in questo intervallo','Inizio dello storico','Le esecuzioni programmate possono subire ritardi o saltare']
+  };
   const chartKeys=['up','degraded','maintenance','unknown','failed','checking'];
   const labels={
     en:['Uptime history','30 days','90 days','Measured availability','Store verification blocked (HTTP {code})','Recent incidents','No incidents observed in this period','Waiting for the first measurements','History unavailable','No recent measurement','Failed check detected','Recovery observed','No data','samples','Unknown','UTC days · availability among conclusive checks; missing checks are not counted. Scheduled checks may be delayed.','Website maintenance is enabled.','No recovery observed','The monitor is running, but the latest checks are still inconclusive.','Try refreshing or running the GitHub Actions monitor again.','Monitor data loaded successfully.','Service overview'],
@@ -75,11 +83,11 @@
     return `<h4>${name}</h4><div class="tooltip-date">${isTebex?o[5]:d[0]}</div><div class="tooltip-state" style="--tooltip-state-color:${color}">${statusText(state,lang)}</div><div class="tooltip-grid"><span>${d[1]}</span><strong>${sample?statusText(sample[1],lang):'—'}</strong><span>${d[5]}</span><strong>${Number.isInteger(sample?.[3])?'HTTP '+sample[3]:'—'}</strong>${rows}</div><div class="tooltip-note">${d[6]}: ${stamp}${!sample?' · '+d[2]:stale?' · '+d[3]:''}${isTebex?' · '+o[4]+(sample&&!components?' · '+o[6]:''):blocked?' · '+d[4]:''}</div>`;
   }
 
-  function tooltipHtml(serviceName, dateText, stateKey, stats, availabilityText){
+  function tooltipHtml(serviceName, dateText, stateKey, stats, availabilityText, emptyReason=''){
     const lang=currentLang(), tc=tipCopy[lang];
     const label = stateKey==='mixed'?periodCopy[lang][8]:['degraded','maintenance'].includes(stateKey)?statusText(stateKey,lang):(tc[stateKey] || tc.unknown);
     const colorMap={up:'#66d98c',failed:'#ef535b',unknown:'#92959e',mixed:'#ffcc28',degraded:'#ffcc28',maintenance:'#a78bfa',partial:'#7ca7fa',empty:'#4b4f59'};
-    return `<h4>${serviceName}</h4><div class="tooltip-date">${dateText}</div><div class="tooltip-state" style="--tooltip-state-color:${colorMap[stateKey]||colorMap.unknown}">${label}</div><div class="tooltip-grid"><span>${tc.availability}</span><strong>${availabilityText}</strong><span>${tc.checks}</span><strong>${stats.total}</strong><span>${tc.successful}</span><strong>${stats.up}</strong><span>${tc.failedCount}</span><strong>${stats.failed}</strong><span>${tc.unknownCount}</span><strong>${stats.unknown}</strong>${stats.degraded?`<span>${officialCopy[lang][0]}</span><strong>${stats.degraded}</strong>`:''}${stats.maintenance?`<span>${officialCopy[lang][1]}</span><strong>${stats.maintenance}</strong>`:''}</div><div class="tooltip-note">${periodCopy[lang][9]}</div>`;
+    return `<h4>${serviceName}</h4><div class="tooltip-date">${dateText}</div><div class="tooltip-state" style="--tooltip-state-color:${colorMap[stateKey]||colorMap.unknown}">${label}</div><div class="tooltip-grid"><span>${tc.availability}</span><strong>${availabilityText}</strong><span>${tc.checks}</span><strong>${stats.total}</strong><span>${tc.successful}</span><strong>${stats.up}</strong><span>${tc.failedCount}</span><strong>${stats.failed}</strong><span>${tc.unknownCount}</span><strong>${stats.unknown}</strong>${stats.degraded?`<span>${officialCopy[lang][0]}</span><strong>${stats.degraded}</strong>`:''}${stats.maintenance?`<span>${officialCopy[lang][1]}</span><strong>${stats.maintenance}</strong>`:''}</div><div class="tooltip-note">${emptyReason||periodCopy[lang][9]}</div>`;
   }
   function drawHistory(preserveInteraction=false){
     const previousTarget=preserveInteraction&&tipTarget&&historyRows.contains(tipTarget)?tipTarget:null;
@@ -94,12 +102,30 @@
     historyPanel.querySelector('[data-uptime-label="15"]').textContent=hourly?periodCopy[lang][5]:weekly?longPeriodCopy[lang][2]:t[15];
     const hourRange=new Intl.DateTimeFormat(lang,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'UTC',hourCycle:'h23'});
     const note=document.getElementById('uptime-empty'); note.textContent=loadFailed?t[8]:!history?t[7]:now-history.updated>FRESH_SECONDS?t[9]:''; note.hidden=!note.textContent;
+    let coverage=document.getElementById('uptime-coverage');
+    if(!coverage){
+      coverage=make('div','uptime-coverage'); coverage.id='uptime-coverage';
+      const label=make('span','uptime-coverage-label'); label.id='uptime-coverage-label';
+      const track=make('div','uptime-coverage-track'); track.setAttribute('role','progressbar'); track.setAttribute('aria-valuemin','0'); track.setAttribute('aria-valuemax','100'); track.id='uptime-coverage-track';
+      const fill=make('div','uptime-coverage-fill'); fill.id='uptime-coverage-fill'; track.append(fill);
+      coverage.append(label,track);historyPanel.querySelector('.uptime-key').before(coverage);
+    }
+    const covered=new Set((history?.services?.landing||[]).filter(x=>x[0]>=start&&x[0]<=now).map(x=>Math.min(buckets-1,Math.floor((x[0]-start)/step)))).size;
+    const ratio=buckets?covered/buckets:0;
+    coverage.hidden=!history; coverage.classList.toggle('is-low',ratio<.6);
+    document.getElementById('uptime-coverage-label').textContent=`${coverageCopy[lang][0]} · ${covered} ${coverageCopy[lang][1]} ${buckets} ${coverageCopy[lang][2]}`;
+    const coverageTrack=document.getElementById('uptime-coverage-track'); coverageTrack.setAttribute('aria-valuenow',String(Math.round(ratio*100)));
+    coverageTrack.setAttribute('aria-valuetext',`${covered} ${coverageCopy[lang][1]} ${buckets}`);
+    document.getElementById('uptime-coverage-fill').style.width=`${Math.max(0,Math.min(100,ratio*100))}%`;
     document.getElementById('maintenance-status').hidden=window.SMDZ_SITE_CONFIG?.maintenance?.enabled!==true;
     if(!chartTarget)hideTooltip(); historyRows.replaceChildren(); incidentList.replaceChildren(); let incidents=[], any=false;
     for(const service of services){
       const key=service.key,name=typeof service.name==='string'?service.name:service.name[lang],all=history?.services?.[key]||[],samples=all.filter(x=>x[0]>=start&&x[0]<=now),known=samples.filter(x=>['up','failed','degraded'].includes(x[1])),success=known.filter(x=>x[1]==='up'); any ||= samples.length>0;
       const line=make('article','uptime-service'),head=make('div','uptime-service-head'),nameNode=make('h3','',name),summary=make('div','uptime-summary');
       summary.append(make('span','',key==='tebex'?officialCopy[lang][7]:t[3]),make('strong','',known.length?pct.format(success.length/known.length):'—'),make('span','',`${num.format(known.length)}/${num.format(samples.length)} ${t[13]}`));
+      const serviceCoverage=new Set(samples.map(x=>Math.min(buckets-1,Math.floor((x[0]-start)/step)))).size;
+      const coverageText=make('span','uptime-service-coverage',`${serviceCoverage}/${buckets} ${coverageCopy[lang][2]}`);
+      summary.append(coverageText);
       const identity=make('div','uptime-service-identity'),state=states.get(key)||'unknown',indicator=make('span','uptime-current',statusText(state,lang)); indicator.dataset.state=state; indicator.dataset.tipKey=key+'-current'; indicator.tabIndex=0; const latestSample=all.at(-1); bindTip(indicator,()=>currentTooltip(name,state,latestSample,key==='tebex')); identity.append(nameNode,indicator); head.append(identity,summary); line.append(head);
       const days=Array.from({length:buckets},()=>[]); for(const x of samples){const i=Math.min(buckets-1,Math.floor((x[0]-start)/step)); if(days[i]) days[i].push(x);}
       const bars=make('div','uptime-bars'); bars.style.setProperty('--days',buckets); bars.setAttribute('role','group'); bars.setAttribute('aria-label',`${name}: ${t[3]} ${known.length?pct.format(success.length/known.length):t[12]}`);
@@ -113,7 +139,9 @@
         const fullDay=new Intl.DateTimeFormat(lang,{dateStyle:'full',timeZone:'UTC'});const dateText=hourly?`${hourRange.format(from)} – ${hourRange.format(to)} UTC`:weekly?`${dayFormat.format(from)} – ${dayFormat.format(new Date(to.getTime()-86400000))} UTC`:fullDay.format(from);
         const stats={total:day.length,up,failed:fail,unknown,degraded,maintenance};
         bar.setAttribute('aria-label',`${name} · ${dateText} · ${stateKey==='mixed'?periodCopy[lang][8]:['degraded','maintenance'].includes(stateKey)?statusText(stateKey,lang):tipCopy[lang][stateKey]} · ${availabilityText}`);
-        bindTip(bar,()=>tooltipHtml(name,dateText,stateKey,stats,availabilityText));
+        const firstTimestamp=all[0]?.[0];
+        const reason=stateKey==='empty' ? (firstTimestamp===undefined||start+(i+1)*step<=firstTimestamp?coverageCopy[lang][3]:coverageCopy[lang][4])+' · '+coverageCopy[lang][6] : '';
+        bindTip(bar,()=>tooltipHtml(name,dateText,stateKey,stats,availabilityText,reason));
         bars.append(bar);
       });
       line.append(bars);
