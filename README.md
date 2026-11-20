@@ -97,3 +97,11 @@ Error pages use their own localized HTTP title and description. The service moni
 
 ### Shared footer and public Worker checks
 All 16 content pages share the main footer layout, with page-relative links. Error pages use an open layout and staged animations. The monitor tracks six services, including the loyalty configuration endpoint and live giveaway snapshot; both checks use public GET routes only. A disabled loyalty program or an empty giveaway list does not mean the public endpoint is down. New services accumulate history from the first run; existing samples remain unchanged. No Worker source, credentials or user-specific data are included. The monitor records only the enabled flag or the active giveaway count as optional sample metadata. These are API checks, not end-to-end purchase, redemption or participation tests.
+
+
+Status update: removed right yellow rails, added redesigned uptime tooltips, and improved monitor loading with fallback history source and clearer states.
+
+
+### Monitor refresh and diagnostics
+
+The monitor runs on the existing 15-minute schedule, on manual dispatch, and on changes to its workflow, probe or configuration on main. GitHub may delay scheduled runs. The Status refresh button reloads measured history; it does not trigger checks. Samples older than 45 minutes are shown as unverified, and their last result is available in the status tooltip. Browser probes install Chromium explicitly and do not bypass access challenges. HTTP 403 or 429 remains unverified. No changes to the uptime-data branch are required.

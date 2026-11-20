@@ -21,7 +21,10 @@ def http_state(code, headers):
 def browser_probe(service):
     from playwright.sync_api import sync_playwright
     with sync_playwright() as engine:
-        browser = engine.chromium.launch(channel='chrome', headless=True, timeout=15000)
+        try:
+            browser = engine.chromium.launch(headless=True, timeout=15000)
+        except Exception:
+            browser = engine.chromium.launch(channel='chrome', headless=True, timeout=15000)
         try:
             page = browser.new_page()
             response = page.goto(service['url'], wait_until='domcontentloaded', timeout=20000)
