@@ -100,5 +100,7 @@
 .status-legend-row[role=button]:hover,.status-legend-row[role=button]:focus-visible,.status-legend-row.is-active{background:var(--bl-panel-alt);transform:translateX(3px);outline:2px solid var(--state-color);outline-offset:2px;}
 .status-chart-services{display:grid;gap:5px;margin:8px 0 0;padding:0;list-style:none;font-size:12px;color:var(--bl-ink);}
 .status-chart-services li{padding:5px 0;border-top:1px solid var(--bl-divider);}
-.uptime-store-note[data-catalog=up]{color:var(--bl-ink);border-left:3px solid #66d98c;padding-left:8px;}
 @media(prefers-reduced-motion:reduce){.status-ring-segment,.status-ring-center strong,.status-legend-row[role=button]{transition:none;}.status-legend-row[role=button]:hover,.status-legend-row[role=button]:focus-visible,.status-legend-row.is-active{transform:none;}}
+
+.uptime-period{flex-wrap:wrap;justify-content:flex-end;max-width:100%;}.uptime-period .btn{white-space:nowrap;}
+@media(max-width:620px){.uptime-period{justify-content:flex-start;gap:6px;}.uptime-period .btn{padding-inline:9px;}}
