@@ -62,6 +62,32 @@ def validate_worker_probe(kind, payload):
     return 'unknown', None
 
 
+def catalog_probe(url):
+    code = None
+    try:
+        request = urllib.request.Request(url, headers={'Accept': 'application/json', 'User-Agent': 'SMDZ-Studios-Uptime/1.2'})
+        with urllib.request.urlopen(request, timeout=20) as response:
+            code = response.status
+            if http_state(code, response.headers) != 'up':
+                return {'catalog': http_state(code, response.headers), 'catalogCode': code}
+            content = response.read(4_000_001)
+            if len(content) > 4_000_000:
+                return {'catalog': 'unknown', 'catalogCode': code}
+            payload = json.loads(content)
+            if not isinstance(payload, dict):
+                return {'catalog': 'unknown', 'catalogCode': code}
+            source = payload.get('source')
+            packages = payload.get('packages')
+            count = payload.get('count')
+            if payload.get('ok') is True and isinstance(source, dict) and source.get('publicHeadlessApi') is True and isinstance(packages, list) and type(count) is int and count == len(packages) and count >= 0:
+                return {'catalog': 'up', 'catalogCode': code, 'catalogCount': count}
+            return {'catalog': 'unknown', 'catalogCode': code}
+    except urllib.error.HTTPError as exc:
+        return {'catalog': http_state(exc.code, exc.headers), 'catalogCode': exc.code}
+    except (OSError, ValueError, TypeError):
+        return {'catalog': 'unknown', 'catalogCode': code}
+
+
 def probe(service):
     started = time.monotonic()
     code = None
@@ -115,6 +141,9 @@ def probe(service):
             print('Store browser probe:', state, code)
         except Exception as exc:
             print('Store browser probe unavailable:', type(exc).__name__)
+    if service.get('catalog_url') and state != 'up':
+        metadata = catalog_probe(service['catalog_url'])
+        print('Store catalog probe:', metadata['catalog'], metadata['catalogCode'])
     sample = [state, round((time.monotonic()-started)*1000), code]
     return sample + [metadata] if metadata is not None else sample
 

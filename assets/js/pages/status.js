@@ -23,6 +23,20 @@
   const make=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;};
   const tooltip=document.createElement('div'); tooltip.className='status-data-tooltip'; tooltip.hidden=true; tooltip.id='uptime-data-tooltip'; tooltip.setAttribute('role','tooltip'); document.body.append(tooltip); let tipTarget=null,tipTimer=0;
   function currentLang(){return root.lang in labels?root.lang:'en';}
+  const chartCopy={"en":["No services in this state","Services","Tebex catalog API accessible ({n} packages)","Tebex catalog API check failed","Tebex catalog API unverified","The catalog check does not confirm storefront or checkout availability."],"es":["No hay servicios en este estado","Servicios","API del catálogo Tebex accesible ({n} productos)","Comprobación de la API del catálogo Tebex fallida","API del catálogo Tebex sin verificar","La comprobación del catálogo no confirma la disponibilidad de la tienda web ni del pago."],"fr":["Aucun service dans cet état","Services","API du catalogue Tebex accessible ({n} produits)","Échec de la vérification de l’API du catalogue Tebex","API du catalogue Tebex non vérifiée","La vérification du catalogue ne confirme pas la disponibilité de la boutique ni du paiement."],"de":["Keine Dienste in diesem Status","Dienste","Tebex-Katalog-API erreichbar ({n} Produkte)","Prüfung der Tebex-Katalog-API fehlgeschlagen","Tebex-Katalog-API nicht geprüft","Die Katalogprüfung bestätigt nicht die Verfügbarkeit des Shops oder der Kasse."],"pt":["Nenhum serviço neste estado","Serviços","API do catálogo Tebex acessível ({n} produtos)","Falha na verificação da API do catálogo Tebex","API do catálogo Tebex não verificada","A verificação do catálogo não confirma a disponibilidade da loja nem do pagamento."],"it":["Nessun servizio in questo stato","Servizi","API del catalogo Tebex raggiungibile ({n} prodotti)","Verifica dell’API del catalogo Tebex non riuscita","API del catalogo Tebex non verificata","La verifica del catalogo non conferma la disponibilità del negozio o del pagamento."]};
+  const ring=document.querySelector('.status-ring'),ringSvg=ring.querySelector('svg'),centerLabel=ring.querySelector('.status-ring-center span');
+  let chartLocked=null,chartHover=null;
+  const hitPaths=new Map();
+  function members(key){return services.filter(service=>states.get(service.key)===key);}
+  function localizedName(service){return typeof service.name==='string'?service.name:service.name[currentLang()];}
+  function chartLabel(key){return copy[currentLang()][keys[key]];}
+  function chartTip(key){const lang=currentLang(),rows=members(key),percent=new Intl.NumberFormat(lang,{style:'percent',maximumFractionDigits:1}).format(rows.length/services.length);return `<h4>${chartLabel(key)}</h4><div class="tooltip-date">${rows.length} / ${services.length} · ${percent}</div><ul class="status-chart-services">${rows.length?rows.map(row=>`<li>${localizedName(row)}</li>`).join(''):`<li>${chartCopy[lang][0]}</li>`}</ul>`;}
+  function paintChartSelection(){const key=chartHover||chartLocked;document.getElementById('metric-total').textContent=String(key?members(key).length:services.length);centerLabel.textContent=key?chartLabel(key):chartCopy[currentLang()][1];for(const item of chartKeys){const segment=ring.querySelector(`[data-segment="${item}"]`),row=document.querySelector(`[data-metric="${item}"]`);segment.classList.toggle('is-active',key===item);segment.classList.toggle('is-muted',!!key&&key!==item&&members(item).length>0);row.classList.toggle('is-active',key===item);row.setAttribute('aria-pressed',String(chartLocked===item));}}
+  function arcPath(offset,length){const point=n=>[80+62*Math.cos(n*Math.PI/50),80+62*Math.sin(n*Math.PI/50)].join(' ');if(length<=0)return '';if(length>=99.999)return `M ${point(offset)} A 62 62 0 1 1 ${point(offset+50)} A 62 62 0 1 1 ${point(offset)}`;return `M ${point(offset)} A 62 62 0 ${length>50?1:0} 1 ${point(offset+length)}`;}
+  function activateChart(key,target){chartLocked=chartLocked===key?null:key;chartHover=null;paintChartSelection();if(chartLocked)showTooltip(target,chartTip(key));else hideTooltip();}
+  function wireChart(target,key,keyboard){target.addEventListener('mouseenter',()=>{chartHover=key;paintChartSelection();showTooltip(target,chartTip(key));});target.addEventListener('mouseleave',()=>{chartHover=null;paintChartSelection();if(!chartLocked||chartLocked!==key)hideTooltip();});target.addEventListener('click',()=>activateChart(key,target));if(keyboard){target.setAttribute('role','button');target.tabIndex=0;target.addEventListener('focus',()=>{chartHover=key;paintChartSelection();showTooltip(target,chartTip(key));});target.addEventListener('blur',()=>{chartHover=null;paintChartSelection();hideTooltip();});target.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activateChart(key,target);}});}}
+  for(const key of chartKeys){const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('class','status-ring-hit');path.setAttribute('aria-hidden','true');ringSvg.append(path);hitPaths.set(key,path);wireChart(path,key,false);wireChart(document.querySelector(`[data-metric="${key}"]`),key,true);}
+  function catalogText(sample){const meta=sample?.[4],t=chartCopy[currentLang()];if(meta?.catalog==='up'&&Number.isInteger(meta.catalogCount)&&meta.catalogCount>=0)return t[2].replace('{n}',new Intl.NumberFormat(currentLang()).format(meta.catalogCount));if(meta?.catalog==='failed')return t[3];if(meta?.catalog==='unknown')return t[4];return '';}
   function render(){
     const lang=currentLang(),t=copy[lang],total=services.length,counts={up:0,unknown:0,failed:0,checking:0};
     services.forEach(({key})=>{const state=states.get(key);counts[Object.hasOwn(counts,state)?state:'unknown']++;});
@@ -32,10 +46,10 @@
       const count=counts[key],fraction=total?count/total:0,segment=document.querySelector(`[data-segment="${key}"]`);
       document.getElementById('metric-'+key).textContent=String(count);
       document.getElementById('percent-'+key).textContent=format.format(fraction);
-      const length=fraction*100; segment.setAttribute('stroke-dasharray',`${length} ${100-length}`); segment.setAttribute('stroke-dashoffset',String(-offset)); segment.style.opacity=count?1:0; offset+=length;
+      const length=fraction*100; segment.setAttribute('stroke-dasharray',`${length} ${100-length}`); segment.setAttribute('stroke-dashoffset',String(-offset)); segment.style.opacity=count?1:0;const hit=hitPaths.get(key);hit.setAttribute('d',arcPath(offset,length));hit.style.display=count?'':'none';offset+=length;
     }
     document.querySelector('.status-legend-row[data-metric="checking"]').hidden=!counts.checking;
-    document.getElementById('metric-total').textContent=String(total);
+    if(chartLocked&&!counts[chartLocked])chartLocked=null;if(chartHover&&!counts[chartHover])chartHover=null;paintChartSelection();
     stamp.textContent=busy?t[5]:last?`${t[4]}: ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'medium'}).format(last)}`:'—';
     let hint=document.getElementById('status-monitor-hint');
     if(!hint){hint=make('p','status-monitor-hint'); hint.id='status-monitor-hint'; document.querySelector('.status-overview').append(hint);}
@@ -45,12 +59,12 @@
   function hideTooltip(){if(tipTarget)tipTarget.removeAttribute('aria-describedby');tipTarget=null;tooltip.classList.remove('is-visible');clearTimeout(tipTimer);tipTimer=setTimeout(()=>{tooltip.hidden=true;tooltip.replaceChildren();},150);}
   function showTooltip(target, html){clearTimeout(tipTimer);if(tipTarget&&tipTarget!==target)tipTarget.removeAttribute('aria-describedby');tipTarget=target;target.setAttribute('aria-describedby',tooltip.id);tooltip.innerHTML=html;tooltip.hidden=false;tooltip.classList.remove('top');const rect=target.getBoundingClientRect(),w=tooltip.offsetWidth,h=tooltip.offsetHeight;let left=Math.max(8,Math.min(rect.left+rect.width/2-w/2,innerWidth-w-8));let top=rect.top-h-14;const below=top<8;if(below)top=rect.bottom+14;top=Math.max(8,Math.min(top,innerHeight-h-8));tooltip.style.left=`${left}px`;tooltip.style.top=`${top}px`;tooltip.style.setProperty('--tip-arrow',`${Math.max(18,Math.min(w-22,rect.left+rect.width/2-left))}px`);tooltip.classList.toggle('top',below);requestAnimationFrame(()=>{if(tipTarget===target)tooltip.classList.add('is-visible');});}
   function bindTip(target,content){const open=()=>showTooltip(target,content());target.addEventListener('mouseenter',open);target.addEventListener('focus',open);target.addEventListener('mouseleave',()=>{if(document.activeElement!==target)hideTooltip();});target.addEventListener('blur',hideTooltip);target.addEventListener('click',open);}
-  function currentTooltip(name,state,sample){const lang=currentLang(),d=detailCopy[lang],t=copy[lang],stale=sample&&Date.now()/1000-sample[0]>FRESH_SECONDS,blocked=sample&&[401,403,429].includes(sample[3]);const stamp=sample?new Intl.DateTimeFormat(lang,{dateStyle:'medium',timeStyle:'medium',timeZone:'UTC'}).format(new Date(sample[0]*1000)):'—';const color={up:'#66d98c',failed:'#ffa752',unknown:'#92959e',checking:'#7ca7fa'}[state];return `<h4>${name}</h4><div class="tooltip-date">${d[0]}</div><div class="tooltip-state" style="--tooltip-state-color:${color}">${t[keys[state]]}</div><div class="tooltip-grid"><span>${d[1]}</span><strong>${sample?t[keys[sample[1]]]:'—'}</strong><span>${d[5]}</span><strong>${Number.isInteger(sample?.[3])?'HTTP '+sample[3]:'—'}</strong></div><div class="tooltip-note">${d[6]}: ${stamp}${!sample?' · '+d[2]:stale?' · '+d[3]:''}${blocked?' · '+d[4]:''}${sample&&!Number.isInteger(sample[3])?' · '+d[7]:''}</div>`;}
+  function currentTooltip(name,state,sample){const lang=currentLang(),d=detailCopy[lang],t=copy[lang],stale=sample&&Date.now()/1000-sample[0]>FRESH_SECONDS,blocked=sample&&[401,403,429].includes(sample[3]);const stamp=sample?new Intl.DateTimeFormat(lang,{dateStyle:'medium',timeStyle:'medium',timeZone:'UTC'}).format(new Date(sample[0]*1000)):'—';const color={up:'#66d98c',failed:'#ef535b',unknown:'#92959e',checking:'#7ca7fa'}[state];return `<h4>${name}</h4><div class="tooltip-date">${d[0]}</div><div class="tooltip-state" style="--tooltip-state-color:${color}">${t[keys[state]]}</div><div class="tooltip-grid"><span>${d[1]}</span><strong>${sample?t[keys[sample[1]]]:'—'}</strong><span>${d[5]}</span><strong>${Number.isInteger(sample?.[3])?'HTTP '+sample[3]:'—'}</strong></div><div class="tooltip-note">${d[6]}: ${stamp}${!sample?' · '+d[2]:stale?' · '+d[3]:''}${blocked?' · '+d[4]:''}${sample&&!Number.isInteger(sample[3])?' · '+d[7]:''}</div>${catalogText(sample)?`<div class="tooltip-note">${catalogText(sample)}. ${chartCopy[lang][5]}</div>`:''}`;}
 
   function tooltipHtml(serviceName, dateText, stateKey, stats, availabilityText){
     const lang=currentLang(), tc=tipCopy[lang];
     const label = tc[stateKey] || tc.unknown;
-    const colorMap={up:'#66d98c',failed:'#ffa752',unknown:'#92959e',mixed:'#ffcc28',partial:'#7ca7fa',empty:'#4b4f59'};
+    const colorMap={up:'#66d98c',failed:'#ef535b',unknown:'#92959e',mixed:'#ffcc28',partial:'#7ca7fa',empty:'#4b4f59'};
     return `<h4>${serviceName}</h4><div class="tooltip-date">${dateText}</div><div class="tooltip-state" style="--tooltip-state-color:${colorMap[stateKey]||colorMap.unknown}">${label}</div><div class="tooltip-grid"><span>${tc.availability}</span><strong>${availabilityText}</strong><span>${tc.checks}</span><strong>${stats.total}</strong><span>${tc.successful}</span><strong>${stats.up}</strong><span>${tc.failedCount}</span><strong>${stats.failed}</strong><span>${tc.unknownCount}</span><strong>${stats.unknown}</strong></div><div class="tooltip-note">${tc.note}</div>`;
   }
   function drawHistory(){
@@ -83,6 +97,7 @@
       line.append(bars);
       const axis=make('div','uptime-axis'); axis.append(make('span','',dayFormat.format(new Date(start*1000))),make('span','',dayFormat.format(new Date(end*1000)))); line.append(axis);
       const latest=all.at(-1); if(key==='store'&&state==='unknown'&&latest&&now-latest[0]<=FRESH_SECONDS&&[401,403,429].includes(latest[3])) line.append(make('p','uptime-store-note',t[4].replace('{code}',String(latest[3]))));
+      if(key==='store'&&latest&&now-latest[0]<=FRESH_SECONDS&&catalogText(latest)){const note=make('p','uptime-store-note',catalogText(latest)+'. '+chartCopy[lang][5]);note.dataset.catalog=latest[4].catalog;line.append(note);}
       if(key==='rewards'||key==='giveaways'){
         const f=featureLabels[lang],meta=latest?.[4];
         if(state==='up'&&meta){ if(key==='rewards'&&typeof meta.enabled==='boolean') line.append(make('p','uptime-feature-note',f[meta.enabled?0:1])); if(key==='giveaways'&&Number.isInteger(meta.active)&&meta.active>=0) line.append(make('p','uptime-feature-note',f[2].replace('{n}',num.format(meta.active)))); }
@@ -106,7 +121,7 @@
     loadFailed=!best;if(best&&(!history||best.updated>=history.updated)){history=best;last=new Date(best.updated*1000);}
   }
   async function refresh(){
-    if(busy) return; busy=true; button.disabled=true; services.forEach(({key})=>states.set(key,'checking')); render(); drawHistory();
+    if(busy) return;hideTooltip();chartHover=null; busy=true; button.disabled=true; services.forEach(({key})=>states.set(key,'checking')); render(); drawHistory();
     try{ await tryFetchHistory(); }catch{}
     const now=Date.now()/1000; services.forEach(({key})=>{const sample=history?.services?.[key]?.at(-1); states.set(key,sample&&sample[0]<=now+300&&now-sample[0]<=FRESH_SECONDS?sample[1]:'unknown');});
     busy=false; button.disabled=false; render(); drawHistory();
@@ -114,7 +129,7 @@
   historyPanel.querySelectorAll('[data-period]').forEach(el=>el.addEventListener('click',()=>{period=Number(el.dataset.period); drawHistory();}));
   new MutationObserver(()=>{render(); drawHistory(); hideTooltip();}).observe(root,{attributes:true,attributeFilter:['lang']});
   button.addEventListener('click',refresh);
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')hideTooltip();}); document.addEventListener('pointerdown',event=>{if(!event.target.closest('.uptime-day,.uptime-current'))hideTooltip();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){chartHover=null;chartLocked=null;paintChartSelection();hideTooltip();}}); document.addEventListener('pointerdown',event=>{if(!event.target.closest('.uptime-day,.uptime-current,.status-ring-hit,.status-legend-row')){chartLocked=null;chartHover=null;paintChartSelection();hideTooltip();}});
   window.addEventListener('scroll',hideTooltip,{passive:true}); window.addEventListener('resize',hideTooltip);
   drawHistory(); refresh(); setInterval(()=>{ if(!document.hidden) refresh(); },60000);
 })();

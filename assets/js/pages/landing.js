@@ -35,19 +35,15 @@
   const detectedLang = (navigator.languages?.length ? navigator.languages : [navigator.language]).map(value => String(value).toLowerCase().split(/[-_]/)[0]).find(value => Object.hasOwn(locales,value));
   let lang = Object.hasOwn(locales,savedLang) ? savedLang : detectedLang || 'en';
   save('smdz-landing-language',lang);
-  function getHeroTitleText() {
-    const key = 'title' + lang.charAt(0).toUpperCase() + lang.slice(1);
-    return heroTitle.dataset[key] || heroTitle.dataset.titleEn || 'Built for Roleplay.';
-  }
-  function createHeroTitleMarkup(text) {
-    const match = text.match(/roleplay/i);
-    if (!match) return text;
-    const start = match.index || 0;
-    const end = start + match[0].length;
-    const before = text.slice(0, start);
-    const word = text.slice(start, end);
-    const after = text.slice(end);
-    return `${before}<span class="roleplay-word">${word}</span>${after}`;
+  const heroPhrases = [{"en":["Built for ","Roleplay"],"es":["Creado para ","Roleplay"],"fr":["Conçu pour le ","roleplay"],"de":["Entwickelt für ","Roleplay"],"pt":["Criado para ","Roleplay"],"it":["Creato per il ","Roleplay"]},{"en":["Designed for ","immersion"],"es":["Diseñado para la ","inmersión"],"fr":["Conçu pour ","l’immersion"],"de":["Gestaltet für ","Immersion"],"pt":["Concebido para a ","imersão"],"it":["Progettato per ","l’immersione"]},{"en":["Where ideas become ","reality"],"es":["Donde las ideas se hacen ","realidad"],"fr":["Quand les idées deviennent ","réalité"],"de":["Wo Ideen Wirklichkeit ","werden"],"pt":["Onde as ideias se tornam ","realidade"],"it":["Dove le idee diventano ","realtà"]},{"en":["Create your own ","world"],"es":["Crea tu propio ","mundo"],"fr":["Crée ton propre ","monde"],"de":["Erschaffe deine eigene ","Welt"],"pt":["Cria o teu próprio ","mundo"],"it":["Crea il tuo ","mondo"]},{"en":["Beyond the ","ordinary"],"es":["Más allá de lo ","habitual"],"fr":["Au-delà de ","l’ordinaire"],"de":["Mehr als der ","Standard"],"pt":["Para além do ","habitual"],"it":["Oltre ","l’ordinario"]},{"en":["Every detail ","matters"],"es":["Cada detalle ","importa"],"fr":["Chaque détail ","compte"],"de":["Jedes Detail ","zählt"],"pt":["Cada detalhe ","conta"],"it":["Ogni dettaglio ","conta"]},{"en":["Code meets ","creativity"],"es":["Código y ","creatividad"],"fr":["Le code rencontre la ","créativité"],"de":["Code trifft ","Kreativität"],"pt":["Código e ","criatividade"],"it":["Codice e ","creatività"]},{"en":["New ways to ","play"],"es":["Nuevas formas de ","jugar"],"fr":["De nouvelles façons de ","jouer"],"de":["Neue Wege zu ","spielen"],"pt":["Novas formas de ","jogar"],"it":["Nuovi modi di ","giocare"]},{"en":["Made for your ","server"],"es":["Creado para tu ","servidor"],"fr":["Créé pour ton ","serveur"],"de":["Gemacht für deinen ","Server"],"pt":["Criado para o teu ","servidor"],"it":["Creato per il tuo ","server"]},{"en":["Turn imagination into ","gameplay"],"es":["Transforma ideas en ","experiencias"],"fr":["Transforme tes idées en ","expériences"],"de":["Mach aus Ideen ","Spielerlebnisse"],"pt":["Transforma ideias em ","experiências"],"it":["Trasforma le idee in ","esperienze"]}];
+  const previousPhrase = read('smdz-last-hero-phrase');
+  const phrasePool = heroPhrases.map((_,i)=>i).filter(i=>String(i)!==previousPhrase);
+  const phraseIndex = phrasePool[Math.floor(Math.random()*phrasePool.length)];
+  save('smdz-last-hero-phrase',String(phraseIndex));
+  function getHeroTitleText() { return heroPhrases[phraseIndex][lang].join('')+'.'; }
+  function createHeroTitleMarkup() {
+    const [before,word]=heroPhrases[phraseIndex][lang];
+    return `${before}<span class="roleplay-word">${word}</span>.`;
   }
   function animateHeroTitle(delay = 0) {
     const text = getHeroTitleText();

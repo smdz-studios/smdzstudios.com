@@ -105,3 +105,7 @@ Status update: removed right yellow rails, added redesigned uptime tooltips, and
 ### Monitor refresh and diagnostics
 
 The monitor runs on the existing 15-minute schedule, on manual dispatch, and on changes to its workflow, probe or configuration on main. GitHub may delay scheduled runs. The Status refresh button reloads measured history; it does not trigger checks. Samples older than 45 minutes are shown as unverified, and their last result is available in the status tooltip. Browser probes install Chromium explicitly and do not bypass access challenges. HTTP 403 or 429 remains unverified. No changes to the uptime-data branch are required.
+
+## Status and landing update
+
+The overview ring and legend support hover and selection. Red indicates failed checks. The landing selects one of ten localized slogans per visit, retaining its meaning when the language changes. All error pages use the same service-status icon as the footer. When a storefront probe is inconclusive or fails, the monitor also checks the existing public Headless catalog endpoint through the Worker. The catalog result is shown separately; it never turns a blocked storefront into a successful storefront measurement. No Worker changes are required.

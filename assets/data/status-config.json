@@ -5,7 +5,8 @@
   "store": {
     "url": "https://smdz-studios.tebex.io/",
     "browser_fallback": true,
-    "expected_brand": "SMDZ Studios"
+    "expected_brand": "SMDZ Studios",
+    "catalog_url": "https://tebex-api-smdz.sergioramonlopezmadrid.workers.dev/api/support/catalog"
   },
   "docs": {
     "url": "https://docs.smdz-studios.com/"
