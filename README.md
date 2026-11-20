@@ -10,28 +10,41 @@ Proprietary website. Copyright (c) 2025–2026 SMDZ Studios. All rights reserved
 
 ```text
 /
-├── index.html                 Home
-├── status.html                Service status
-├── 404.html                   Custom error page
-├── CNAME                      GitHub Pages custom domain
-├── .nojekyll                  Static deployment
-├── favicon.ico                Browser fallback
-├── manifest.webmanifest       PWA manifest and scope
-├── sw.js                      Root-scoped service worker
-├── robots.txt                 Search engine instructions
-├── sitemap.xml                Canonical page URLs
-├── LICENSE                    Proprietary copyright notice
-├── README.md                  Project documentation
+├── index.html                Home
+├── status/index.html         Service status
+├── status.html               Legacy redirect to /status/
+├── discord/index.html        Discord invitation
+├── maintenance/index.html    Maintenance screen
+├── 404.html                  GitHub Pages error handler
+├── errors/                   Other HTTP error templates
 ├── assets/
-│   ├── config/                Site settings
-│   ├── css/                   Styles and Boldline UI
-│   ├── js/                    Page logic and interactions
-│   ├── images/                Branding, backgrounds and artwork
-│   ├── icons/                 Browser and PWA icons
-│   ├── flags/                 Language flags
-│   └── data/                  Health and status configuration
-└── tools/                     Optional metadata helper
+│   ├── config/               Site settings
+│   ├── css/
+│   │   ├── core/             Boldline, shared styles, commands and footer
+│   │   ├── motion/           Scroll and cinematic effects
+│   │   └── pages/            Page-specific styles
+│   ├── js/
+│   │   ├── core/             Shared controls, language menu, PWA and maintenance gate
+│   │   ├── motion/           Scroll, cinematic effects and transitions
+│   │   └── pages/            Home, status, errors, invitation and maintenance
+│   ├── images/               Branding and artwork
+│   ├── icons/                favicons and technology icons
+│   ├── flags/                Language flags
+│   └── data/                 Health and probe definitions
+├── tools/                    Domain helper and uptime monitor
+├── .github/workflows/        Scheduled monitoring
+├── CNAME                     GitHub Pages custom domain
+├── .nojekyll                 Static deployment
+├── favicon.ico
+├── manifest.webmanifest
+├── sw.js
+├── robots.txt
+├── sitemap.xml
+├── LICENSE
+└── README.md
 ```
+
+Status uses the canonical URL `https://smdzstudios.com/status/`. Once that path is deployed, configure Hostinger HTTPS URL forwarding from `status.smdzstudios.com` to `https://smdzstudios.com/status/` using HTTP 302. The browser will show the destination domain. Do not assign a second custom domain to this GitHub Pages site. The root CNAME remains `smdzstudios.com`. Internal links go directly to the canonical page (also works on Live Server); sharing Status uses `statusPublicUrl` in the site configuration. The legacy `/status.html` URL redirects to the new page. No extra repository, build process or history migration is required.
 
 ## Deployment
 
@@ -64,14 +77,14 @@ The About me section includes four specialty rows, including beginner-level 3D m
 
 The beginner 3D & GTA V asset tools group lists Blender, Sollumz, CodeWalker and OpenIV as learning tools, not claims of professional proficiency. Blender artwork comes from Devicon; Sollumz uses its upstream icon with its separate license notice. CodeWalker and OpenIV use illustrative, non-brand SVG symbols.
 
-The independent technologies panel uses `assets/css/technologies-layout.css`. Styles and scripts are checked against the network first, with a cached offline fallback, to reduce stale-layout mismatches after deployment.
+The independent technologies panel uses `assets/css/pages/technologies-layout.css`. Styles and scripts are checked against the network first, with a cached offline fallback, to reduce stale-layout mismatches after deployment.
 
 
 ## Maintenance and scheduled monitoring
 
 - In `assets/config/site-config.js`, set `maintenance.enabled` to `true` and edit the six translated `message` values. Set it to `false` to restore normal navigation. Status remains accessible and the maintenance screen links directly to Discord support. This is a client-side public maintenance screen, not access control or an HTTP 503 response.
 - Upload **all** files, including the hidden `.github/workflows/uptime.yml` folder, to `main`. Enable GitHub Actions if needed. In Actions → SMDZ Service Monitor → Run workflow, select `main` and run it once. The workflow creates/updates the `uptime-data` branch with `history.json`. Do not replace or delete that branch on future uploads. The current GitHub Pages deployment configuration stays unchanged. GitHub Actions needs repository contents write permission (declared in the workflow).
-- The runner checks four public endpoints every 15 minutes, including the Discord invite API, not the Discord platform as a whole. HTTP 401/403/429 are unverified rather than outages. No Cfx.re checks. Uptime is successful / conclusive samples, not continuous availability. Latency is successful request response time from the runner. No fabricated history; 30/90 UTC-day charts fill as checks arrive. Missing intervals are not treated as successes; stale results are unverified after 45 minutes. Incidents represent observed failure and recovery checks, not exact outage times.
+- The runner checks six public endpoints every 15 minutes, including the Discord invite API, not the Discord platform as a whole. HTTP 401/403/429 are unverified rather than outages. No Cfx.re checks. Uptime is successful / conclusive samples, not continuous availability. Request timing remains in the history schema for compatibility but is not displayed. Tebex is verified from its actual storefront content, with a standard Chrome browser retry when a direct check is inconclusive. If access remains blocked, it stays unverified; no challenge bypass or platform-wide status substitution is used. The runner uses the Chrome installation on Ubuntu 24.04 and Playwright 1.57.0. No fabricated history; 30/90 UTC-day charts fill as checks arrive. Missing intervals are not treated as successes; stale results are unverified after 45 minutes. Incidents represent observed failure and recovery checks, not exact outage times.
 - The status UI reads the public JSON from `raw.githubusercontent.com` using `uptimeDataUrl`; brief CDN delays are possible. GitHub scheduled workflows can be delayed or disabled after 60 days of inactivity; check Actions if monitoring stops. No new repository, DNS change, API token or external paid monitor is required for this setup on the public repository.
 
 ## Custom HTTP error pages
@@ -81,3 +94,6 @@ The root `404.html` is automatically served by GitHub Pages for missing paths. A
 GitHub Pages only offers a custom missing-page (404) handler; direct requests to `/errors/503.html` and the other templates normally return HTTP 200. These are visual templates, not actual server error handlers. A server or reverse proxy that supports custom error responses can use them with the appropriate HTTP status, serving the assets independently; the additional templates expect to be served at `/errors/<code>.html`. No DNS or GitHub Actions changes are necessary. The existing maintenance gate remains in effect.
 
 Error pages use their own localized HTTP title and description. The service monitor uses actions/checkout@v5 (Node.js 24); the existing uptime-data branch is unchanged.
+
+### Shared footer and public Worker checks
+All 16 content pages share the main footer layout, with page-relative links. Error pages use an open layout and staged animations. The monitor tracks six services, including the loyalty configuration endpoint and live giveaway snapshot; both checks use public GET routes only. A disabled loyalty program or an empty giveaway list does not mean the public endpoint is down. New services accumulate history from the first run; existing samples remain unchanged. No Worker source, credentials or user-specific data are included. The monitor records only the enabled flag or the active giveaway count as optional sample metadata. These are API checks, not end-to-end purchase, redemption or participation tests.

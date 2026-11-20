@@ -5,6 +5,7 @@ window.SMDZ_SITE_CONFIG = Object.freeze({
   // inquire — Consultar disponibilidad — Amarillo
   customWorkAvailability: 'available',
   publicSiteUrl: 'https://smdzstudios.com/',
+  statusPublicUrl: 'https://status.smdzstudios.com/',
   // true: maintenance screen on Home, Discord and 404; false: normal navigation. Status stays accessible.
   maintenance: {
     enabled: false,

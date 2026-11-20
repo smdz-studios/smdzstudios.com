@@ -18,14 +18,14 @@
 <script>(()=>{const r=document.documentElement;r.classList.add('intro-loading');window.smdzIntroRelease=()=>{if(!r.classList.contains('intro-loading'))return;r.classList.remove('intro-loading');r.classList.add('intro-ready');window.dispatchEvent(new Event('smdz:intro-ready'))};window.smdzIntroTimeout=setTimeout(window.smdzIntroRelease,8500)})()</script>
 <link rel="preload" as="image" href="assets/images/background.webp">
 <link rel="preload" as="image" href="assets/images/smdz-logo.png">
-<link href="assets/css/smdz-boldline.css" rel="stylesheet"/>
-<link href="assets/css/landing.css" rel="stylesheet"/>
-<link rel="stylesheet" href="assets/css/experience-v4.css">
+<link href="assets/css/core/smdz-boldline.css" rel="stylesheet"/>
+<link href="assets/css/core/landing.css?v=20261120-modular-status" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/core/experience-v4.css?v=20261120-modular-status">
 
-<script defer src="assets/js/experience-v4.js"></script>
-<script defer src="./assets/js/language-menu.js"></script>
-<script defer="" src="assets/js/landing.js"></script>
-<script defer="" src="assets/js/smdz-scrollbars.js"></script>
+<script defer src="assets/js/core/experience-v4.js?v=20261120-modular-status"></script>
+<script defer src="./assets/js/core/language-menu.js"></script>
+<script defer="" src="assets/js/pages/landing.js"></script>
+<script defer="" src="assets/js/core/smdz-scrollbars.js"></script>
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="SMDZ Studios">
 <meta property="og:site_name" content="SMDZ Studios">
@@ -36,9 +36,9 @@
 <meta name="twitter:title" content="SMDZ Studios | FiveM &amp; RedM Development">
 <meta name="twitter:description" content="SMDZ Studios is an independent development studio specializing in systems and assets for Grand Theft Auto V and Red Dead Redemption 2, through FiveM and RedM.">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"SMDZ Studios","description":"SMDZ Studios is an independent development studio specializing in systems and assets for Grand Theft Auto V and Red Dead Redemption 2, through FiveM and RedM.","sameAs":["https://smdz-studios.tebex.io/","https://forum.cfx.re/u/smdzstudios/summary"],"founder":{"@type":"Person","name":"Sergio"},"url":"https://smdzstudios.com/"}</script>
-<link rel="stylesheet" href="assets/css/immersive.css">
-<script defer src="assets/js/studio-extras.js"></script>
-<script defer src="assets/js/immersive.js"></script>
+<link rel="stylesheet" href="assets/css/motion/immersive.css">
+<script defer src="assets/js/pages/studio-extras.js"></script>
+<script defer src="assets/js/motion/immersive.js"></script>
 <meta property="og:image" content="https://smdzstudios.com/assets/images/social-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -46,16 +46,16 @@
 <meta property="og:image:alt" content="SMDZ Studios — Built for Roleplay, FiveM and RedM development">
 <meta name="twitter:image" content="https://smdzstudios.com/assets/images/social-preview.jpg">
 <link rel="manifest" href="./manifest.webmanifest">
-<link rel="stylesheet" href="assets/css/upgrade.css">
-<script defer src="assets/js/upgrade.js"></script>
-<script defer src="assets/js/pwa.js"></script>
-<link rel="stylesheet" href="./assets/css/scroll-sync.css">
-<script defer src="./assets/js/scroll-sync.js"></script>
+<link rel="stylesheet" href="assets/css/motion/upgrade.css">
+<script defer src="assets/js/motion/upgrade.js"></script>
+<script defer src="assets/js/core/pwa.js"></script>
+<link rel="stylesheet" href="./assets/css/motion/scroll-sync.css">
+<script defer src="./assets/js/motion/scroll-sync.js?v=20261120-modular-status"></script>
 <link rel="canonical" href="https://smdzstudios.com/">
 <meta property="og:url" content="https://smdzstudios.com/">
-<link rel="stylesheet" href="./assets/css/technologies-layout.css">
+<link rel="stylesheet" href="./assets/css/pages/technologies-layout.css">
 <script src="./assets/config/site-config.js?v=20261120-maintenance"></script>
-<script src="./assets/js/maintenance-gate.js?v=20261120"></script>
+<script src="./assets/js/core/maintenance-gate.js?v=20261120"></script>
 </head>
 <body class="nui-mode">
 <div class="cinema-loader" aria-hidden="true"><div class="loader-center"><img src="assets/images/smdz-logo.png" alt="" width="944" height="678" draggable="false"><div class="loader-track"><i></i></div><span data-es="CARGANDO" data-fr="CHARGEMENT" data-de="LADEN" data-pt="A CARREGAR" data-it="CARICAMENTO">LOADING</span></div></div>
@@ -151,6 +151,6 @@
 <div class="footer-column"><h2><span data-es="Plataformas" data-fr="Plateformes" data-de="Plattformen" data-pt="Plataformas" data-it="Piattaforme">Platforms</span></h2><a href="https://smdz-studios.tebex.io/" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Tienda" data-fr="Boutique" data-de="Shop" data-pt="Loja" data-it="Negozio">Store</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="https://docs.smdz-studios.com/" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Documentación" data-fr="Documentation" data-de="Dokumentation" data-pt="Documentação" data-it="Documentazione">Documentation</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="./discord/" target="_blank" rel="noopener noreferrer" draggable="false">Discord<svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="https://forum.cfx.re/u/smdzstudios/summary" target="_blank" rel="noopener noreferrer" draggable="false">Cfx.re<svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
 <div class="footer-column"><h2><span data-es="Soporte y legal" data-fr="Support et mentions légales" data-de="Support &amp; Rechtliches" data-pt="Suporte e informações legais" data-it="Supporto e note legali">Support &amp; legal</span></h2><a href="./discord/" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Contactar con soporte" data-fr="Contacter le support" data-de="Support kontaktieren" data-pt="Contactar o suporte" data-it="Contatta il supporto">Contact support</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="https://smdz-studios.tebex.io/legal" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Información legal" data-fr="Mentions légales" data-de="Rechtliche Informationen" data-pt="Informações legais" data-it="Informazioni legali">Legal information</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="https://smdz-studios.tebex.io/legal#legal-custom-work" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Condiciones de trabajos a medida" data-fr="Conditions des projets sur mesure" data-de="Auftragsbedingungen" data-pt="Condições de trabalhos personalizados" data-it="Condizioni dei lavori personalizzati">Custom work terms</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
 </nav></div>
-<div class="footer-bottom"><div class="footer-legal">© <span id="year">2025</span> SMDZ Studios. <span data-es="Todos los derechos reservados." data-fr="Tous droits réservés." data-de="Alle Rechte vorbehalten." data-pt="Todos os direitos reservados." data-it="Tutti i diritti riservati.">All rights reserved.</span></div><div class="footer-tools"><a class="btn btn-small" href="./status.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span data-es="Estado de servicios" data-fr="État des services" data-de="Dienststatus" data-pt="Estado dos serviços" data-it="Stato dei servizi">Service status</span></a><button hidden class="btn btn-small" id="install-app" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span data-es="Instalar aplicación" data-fr="Installer l’application" data-de="App installieren" data-pt="Instalar aplicação" data-it="Installa app">Install app</span></button></div><a class="btn btn-small back-top" href="#home" draggable="false"><span data-es="Volver arriba" data-fr="Retour en haut" data-de="Nach oben" data-pt="Voltar ao topo" data-it="Torna in alto">Back to top</span><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></a></div></footer>
+<div class="footer-bottom"><div class="footer-legal">© <span id="year">2025</span> SMDZ Studios. <span data-es="Todos los derechos reservados." data-fr="Tous droits réservés." data-de="Alle Rechte vorbehalten." data-pt="Todos os direitos reservados." data-it="Tutti i diritti riservati.">All rights reserved.</span></div><div class="footer-tools"><a class="btn btn-small" href="./status/"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span data-es="Estado de servicios" data-fr="État des services" data-de="Dienststatus" data-pt="Estado dos serviços" data-it="Stato dei servizi">Service status</span></a><button hidden class="btn btn-small" id="install-app" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg><span data-es="Instalar aplicación" data-fr="Installer l’application" data-de="App installieren" data-pt="Instalar aplicação" data-it="Installa app">Install app</span></button></div><a class="btn btn-small back-top" href="#home" draggable="false"><span data-es="Volver arriba" data-fr="Retour en haut" data-de="Nach oben" data-pt="Voltar ao topo" data-it="Torna in alto">Back to top</span><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></a></div></footer>
 </body>
 </html>

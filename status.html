@@ -1,59 +1,14 @@
 <!doctype html>
-<html lang="en" data-theme="dark" data-accent="yellow">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#111215">
-<title>Service status | SMDZ Studios</title>
-<link rel="icon" href="./favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="./assets/icons/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
-<script>(()=>{const r=document.documentElement;try{r.dataset.theme=localStorage.getItem('smdz-bl-theme')==='light'?'light':'dark';localStorage.setItem('smdz-bl-theme',r.dataset.theme)}catch(e){}r.dataset.siteMotion=matchMedia('(prefers-reduced-motion: reduce)').matches?'reduce':'full'})()</script>
-<link rel="stylesheet" href="./assets/css/smdz-boldline.css">
-<link rel="stylesheet" href="./assets/css/landing.css">
-<link rel="stylesheet" href="./assets/css/experience-v4.css">
-
-<script defer src="./assets/js/experience-v4.js"></script>
-<script defer src="./assets/js/language-menu.js"></script>
-<script defer src="./assets/js/error.js?v=20261120-i18n"></script>
-<link rel="stylesheet" href="./assets/css/status.css?v=20261120-monitor-only">
-<script defer src="./assets/js/status.js?v=20261120-monitor-only"></script>
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="stylesheet" href="./assets/css/scroll-sync.css">
-<script defer src="./assets/js/scroll-sync.js"></script>
-<meta name="description" content="External monitoring of SMDZ Studios, its store, documentation and Discord invitation.">
-<link rel="canonical" href="https://smdzstudios.com/status.html">
-<meta property="og:title" content="Service status | SMDZ Studios">
-<meta property="og:description" content="External monitoring of SMDZ Studios services.">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="SMDZ Studios">
-<meta property="og:url" content="https://smdzstudios.com/status.html">
-<meta property="og:image" content="https://smdzstudios.com/assets/images/social-preview.jpg">
-<script src="./assets/config/site-config.js?v=20261120-maintenance"></script>
-<script src="./assets/js/maintenance-gate.js?v=20261120"></script>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://smdzstudios.com/status/">
+<link rel="icon" href="./favicon.ico">
+<noscript><meta http-equiv="refresh" content="0;url=./status/"></noscript>
+<title>SMDZ Studios | Status</title>
+<script>location.replace(new URL('./status/'+location.search+location.hash,location.href).href)</script>
 </head>
-<body class="nui-mode status-page">
-<div class="ambient" aria-hidden="true"><div class="ambient-photo"></div><div class="ambient-overlay"></div></div>
-<header class="site-header">
-<div class="header-actions">
-<div class="language-picker">
-<button aria-controls="language-options" aria-expanded="false" aria-label="Select language" class="btn language" id="language" type="button"><img alt="" class="flag" draggable="false" id="current-flag" src="./assets/flags/us.svg"/><span id="current-language">EN</span><svg aria-hidden="true" class="icon chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
-<div class="language-options" hidden="" id="language-options">
-<button data-language="en" lang="en" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/us.svg"/><span>English</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></button>
-<button data-language="es" lang="es" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/es.svg"/><span>Español</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></button>
-<button data-language="fr" lang="fr" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/fr.svg"/><span>Français</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></button><button data-language="de" lang="de" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/de.svg"/><span>Deutsch</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></button><button data-language="pt" lang="pt" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/pt.svg"/><span>Português</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></button><button data-language="it" lang="it" type="button"><img alt="" class="flag" draggable="false" src="./assets/flags/it.svg"/><span>Italiano</span><svg aria-hidden="true" class="icon language-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></button></div>
-</div>
-<button aria-label="Switch to dark theme" aria-pressed="false" class="btn theme-switch" id="theme" type="button">
-<span class="moon"><svg aria-hidden="true" class="icon" viewBox="0 0 24 24"><path d="M20.9 13.35A9 9 0 0 1 10.65 3.1 9 9 0 1 0 20.9 13.35Z"></path></svg></span>
-<span class="sun"><svg aria-hidden="true" class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path></svg></span>
-</button>
-</div>
-</header>
-<main class="wrap status-main" id="main">
-<div class="status-heading"><a href="./index.html" aria-label="SMDZ Studios"><img src="./assets/images/smdz-logo.png" class="status-logo" alt="SMDZ Studios" width="944" height="678"></a><div class="status-heading-copy"><h1><span data-es="Estado de servicios" data-fr="État des services" data-de="Dienststatus" data-pt="Estado dos serviços" data-it="Stato dei servizi">Service status</span></h1><p><span data-es="Comprobaciones externas programadas de nuestra web y plataformas." data-fr="Vérifications externes programmées de notre site et de nos plateformes." data-de="Geplante externe Prüfungen unserer Website und Plattformen." data-pt="Verificações externas programadas do nosso site e plataformas." data-it="Verifiche esterne programmate del nostro sito e delle piattaforme.">Scheduled external checks for our website and connected platforms.</span></p></div></div>
-<section class="panel status-overview" aria-labelledby="overview-title"><div class="status-toolbar"><div class="status-overview-title"><div class="status-live-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></div><div><h2 id="overview-title"><span data-es="Resumen de servicios" data-fr="Vue d’ensemble" data-de="Dienstübersicht" data-pt="Resumo dos serviços" data-it="Panoramica dei servizi">Service overview</span></h2><p id="status-time" role="status" aria-live="polite">—</p></div></div><button class="btn btn-primary" id="refresh-status" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M4.8 9a8 8 0 0 1 13.1-4L20 7M4 17l2.1 2A8 8 0 0 0 19.2 15"/></svg><span data-es="Actualizar" data-fr="Actualiser" data-de="Aktualisieren" data-pt="Atualizar" data-it="Aggiorna">Refresh</span></button></div><div class="status-visualization"><div class="status-ring"><svg viewBox="0 0 160 160" aria-hidden="true" focusable="false"><circle class="status-ring-track" cx="80" cy="80" r="62"/><circle class="status-ring-segment" data-segment="up" cx="80" cy="80" r="62" pathLength="100" stroke-dasharray="0 100" stroke-dashoffset="0"/><circle class="status-ring-segment" data-segment="unknown" cx="80" cy="80" r="62" pathLength="100" stroke-dasharray="0 100" stroke-dashoffset="0"/><circle class="status-ring-segment" data-segment="failed" cx="80" cy="80" r="62" pathLength="100" stroke-dasharray="0 100" stroke-dashoffset="0"/><circle class="status-ring-segment" data-segment="checking" cx="80" cy="80" r="62" pathLength="100" stroke-dasharray="0 100" stroke-dashoffset="0"/></svg><div class="status-ring-center"><strong id="metric-total">—</strong><span data-es="Servicios" data-fr="Services" data-de="Dienste" data-pt="Serviços" data-it="Servizi">Services</span></div></div><ul class="status-legend" aria-live="polite" aria-atomic="true"><li class="status-legend-row" data-metric="up"><i aria-hidden="true"></i><span data-es="Accesibles" data-fr="Accessibles" data-de="Erreichbar" data-pt="Acessíveis" data-it="Raggiungibili">Reachable</span><strong id="metric-up">—</strong><span class="metric-percent" id="percent-up">—</span></li><li class="status-legend-row" data-metric="unknown"><i aria-hidden="true"></i><span data-es="Sin verificar" data-fr="Non vérifiés" data-de="Nicht geprüft" data-pt="Não verificados" data-it="Non verificati">Unverified</span><strong id="metric-unknown">—</strong><span class="metric-percent" id="percent-unknown">—</span></li><li class="status-legend-row" data-metric="failed"><i aria-hidden="true"></i><span data-es="Comprobación fallida" data-fr="Échec de vérification" data-de="Prüfung fehlgeschlagen" data-pt="Falha na verificação" data-it="Verifica non riuscita">Check failed</span><strong id="metric-failed">—</strong><span class="metric-percent" id="percent-failed">—</span></li><li class="status-legend-row" data-metric="checking" hidden><i aria-hidden="true"></i><span data-es="Comprobando" data-fr="Vérification" data-de="Wird geprüft" data-pt="A verificar" data-it="Verifica in corso">Checking</span><strong id="metric-checking">—</strong><span class="metric-percent" id="percent-checking">—</span></li></ul></div></section>
-<section class="panel uptime-history" id="uptime-history" aria-labelledby="uptime-title" data-reveal><div class="uptime-heading"><h2 id="uptime-title" data-uptime-label="0">Uptime history</h2><div class="uptime-period"><button type="button" class="btn btn-small" data-period="30" data-uptime-label="1" aria-pressed="true">30 days</button><button type="button" class="btn btn-small" data-period="90" data-uptime-label="2" aria-pressed="false">90 days</button></div></div><p class="uptime-note" data-uptime-label="15"></p><p class="uptime-note" id="maintenance-status" data-uptime-label="16" hidden></p><p class="uptime-note" id="uptime-empty" role="status"></p><div class="uptime-key"><span><i data-state="up"></i><span data-es="Accesible" data-fr="Accessible" data-de="Erreichbar" data-pt="Acessível" data-it="Raggiungibile">Reachable</span></span><span><i data-state="failed"></i><span data-es="Fallo" data-fr="Échec" data-de="Fehler" data-pt="Falha" data-it="Errore">Failed</span></span><span><i data-state="unknown"></i><span data-uptime-label="14">Unknown</span></span><span><i data-state="empty"></i><span data-uptime-label="12">No data</span></span></div><div id="uptime-rows"></div><div class="uptime-incidents"><h2 data-uptime-label="5">Recent incidents</h2><div id="uptime-incidents"></div></div></section><div class="status-bottom"><a class="btn btn-large" href="./index.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7M5 12h14"/></svg><span data-es="Volver al inicio" data-fr="Retour à l’accueil" data-de="Zur Startseite" data-pt="Voltar ao início" data-it="Torna alla home">Back to home</span></a><a class="btn btn-large status-support" href="./discord/" target="_blank" rel="noopener noreferrer"><span data-es="Contactar con soporte" data-fr="Contacter le support" data-de="Support kontaktieren" data-pt="Contactar o suporte" data-it="Contatta il supporto">Contact support</span><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div></main>
-<footer class="wrap error-footer compact-footer"><div class="compact-footer-brand"><strong>SMDZ Studios</strong><span>© 2025 · <span data-es="Todos los derechos reservados." data-fr="Tous droits réservés." data-de="Alle Rechte vorbehalten." data-pt="Todos os direitos reservados." data-it="Tutti i diritti riservati.">All rights reserved.</span></span></div><nav aria-label="Footer navigation" class="compact-footer-links"><a href="./index.html" draggable="false"><span data-es="Inicio" data-fr="Accueil" data-de="Startseite" data-pt="Início" data-it="Home">Home</span></a><a href="./discord/" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Contactar con soporte" data-fr="Contacter le support" data-de="Support kontaktieren" data-pt="Contactar o suporte" data-it="Contatta il supporto">Contact support</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a href="https://smdz-studios.tebex.io/legal" target="_blank" rel="noopener noreferrer" draggable="false"><span data-es="Información legal" data-fr="Mentions légales" data-de="Rechtliche Informationen" data-pt="Informações legais" data-it="Informazioni legali">Legal information</span><svg class="icon footer-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></nav></footer>
-</body></html>
+<body style="background:#111215;color:#f4f5f7;font-family:system-ui; padding:24px"><a style="color:#ffcc28" href="./status/">Status →</a></body>
+</html>

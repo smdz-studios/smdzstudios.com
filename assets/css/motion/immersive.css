@@ -12,7 +12,7 @@
 .cinema-camera { position:absolute; inset:0; transform:translate3d(var(--camera-x,0px),var(--camera-y,0px),0) scale(1.045); }
 .cinema-camera .ambient-photo { inset:-18px; animation:cinema-zoom 36s ease-in-out infinite alternate; }
 .cinema-grain,.cinema-vignette { position:absolute; inset:0; pointer-events:none; }
-.cinema-grain { background:url('../images/grain.svg') repeat; opacity:.085; mix-blend-mode:soft-light; }
+.cinema-grain { background:url('../../images/grain.svg') repeat; opacity:.085; mix-blend-mode:soft-light; }
 .cinema-vignette { background:radial-gradient(ellipse at 50% 43%,transparent 35%,rgba(15,17,20,.17) 100%); }
 html[data-theme=dark] .cinema-vignette { background:radial-gradient(ellipse at 50% 43%,transparent 29%,rgba(0,0,0,.43) 100%); }
 @keyframes cinema-zoom { from{transform:scale(1.01)} to{transform:scale(1.095)} }
@@ -96,7 +96,7 @@ html[data-site-motion=reduce] .cursor-impact-rays{display:none!important}
 .section-dots{--section-outline:#f1f2f4;--section-active:#946000;}
 html[data-theme=dark] .section-dots{--section-outline:#15171a;--section-active:#ffcc28;}
 .section-dots .section-dot span{position:relative;display:inline-block;pointer-events:auto;inset:auto;translate:none!important;white-space:normal;overflow-wrap:anywhere;opacity:.63;padding:0 1px 6px;border:0;border-radius:0;background:none;color:inherit;box-shadow:none;font:italic 900 clamp(20px,1.65vw,26px)/1.08 var(--bl-font-display);letter-spacing:.025em;text-transform:uppercase;text-shadow:1px 2px 0 var(--section-outline),-1px -1px 0 var(--section-outline),1px -1px 0 var(--section-outline),-1px 1px 0 var(--section-outline);transition:opacity 250ms ease,filter 250ms ease;}
-.section-dot span::after{content:"";position:absolute;bottom:0;left:0;right:0;height:6px;background:url("../images/brush-underline.svg") center / 100% 100% no-repeat;transform:scaleX(0);transform-origin:left;transition:transform 360ms cubic-bezier(.2,.85,.3,1);pointer-events:none;}
+.section-dot span::after{content:"";position:absolute;bottom:0;left:0;right:0;height:6px;background:url("../../images/brush-underline.svg") center / 100% 100% no-repeat;transform:scaleX(0);transform-origin:left;transition:transform 360ms cubic-bezier(.2,.85,.3,1);pointer-events:none;}
 .section-dot:hover,.section-dot:focus-visible{color:var(--bl-ink);background:none;box-shadow:none;transform:translateX(-3px);}
 .section-dot:hover span,.section-dot:focus-visible span{opacity:1;}
 .section-dot:focus-visible{outline:2px dashed var(--section-active);outline-offset:5px;}

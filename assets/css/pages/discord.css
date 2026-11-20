@@ -13,7 +13,7 @@ html[data-theme=dark] .invite-page .ambient-overlay { background:linear-gradient
 .invite-content h1 { font:italic 900 clamp(37px,7vw,66px)/.99 var(--bl-font-display); text-transform:uppercase; color:var(--bl-ink); letter-spacing:-.035em; overflow-wrap:anywhere; }
 .invite-accent { color:var(--bl-accent-dark); position:relative; display:inline-block; }
 html[data-theme=dark] .invite-accent { color:#ffcc28; }
-.invite-accent::after { content:""; position:absolute; left:0; right:0; bottom:-8px; height:9px; background:url('../images/brush-underline.svg') center/100% 100% no-repeat; transform-origin:left; animation:invite-brush 650ms 420ms both; }
+.invite-accent::after { content:""; position:absolute; left:0; right:0; bottom:-8px; height:9px; background:url('../../images/brush-underline.svg') center/100% 100% no-repeat; transform-origin:left; animation:invite-brush 650ms 420ms both; }
 .invite-description { color:var(--bl-ink-muted); max-width:440px; font-size:15px; line-height:1.65; margin-top:8px; }
 .invite-members { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:9px 23px; color:var(--bl-ink-muted); font-size:13px; }
 .invite-members[hidden],.invite-countdown[hidden],.invite-error[hidden] { display:none; }

@@ -10,10 +10,16 @@ concurrency:
   cancel-in-progress: false
 jobs:
   monitor:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
+      - name: Prepare browser probe
+        continue-on-error: true
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/smdz-monitor-venv"
+          "$RUNNER_TEMP/smdz-monitor-venv/bin/python" -m pip install --disable-pip-version-check playwright==1.57.0
       - name: Load history branch
         shell: bash
         run: |
@@ -37,7 +43,9 @@ jobs:
         run: |
           set -euo pipefail
           target="$RUNNER_TEMP/uptime-data"
-          python3 tools/uptime-monitor.py assets/data/status-config.json "$target/history.json"
+          monitor_python="$RUNNER_TEMP/smdz-monitor-venv/bin/python"
+          if [ ! -x "$monitor_python" ]; then monitor_python=python3; fi
+          "$monitor_python" tools/uptime-monitor.py assets/data/status-config.json "$target/history.json"
           git -C "$target" config user.name 'github-actions[bot]'
           git -C "$target" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git -C "$target" add history.json

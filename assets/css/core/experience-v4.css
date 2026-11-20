@@ -37,7 +37,7 @@ html[data-language-motion] [data-es], html[data-language-motion] #hero-title-lin
 .command-head .icon,.command-row .icon,.command-search .icon { width:18px; height:18px; flex:none; }
 .share-notice { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:100000; width:max-content; max-width:calc(100% - 48px); background:var(--bl-panel); color:var(--bl-ink); border:var(--bl-border-thick); border-radius:var(--bl-radius-sm); box-shadow:var(--bl-shadow); padding:12px 16px; font-weight:800; font-size:13px; pointer-events:none; text-align:center; }
 .share-notice:not([hidden]) { animation:share-pop 300ms cubic-bezier(.2,1.5,.4,1) both; }
-#share-site.is-copied { background:#ffcc28; color:#15171a; animation:share-button-pop 280ms ease both; }
+:is(#share-site,#share-site-secondary).is-copied { background:#ffcc28; color:#15171a; animation:share-button-pop 280ms ease both; }
 .page-wipe { position:fixed; inset:0; z-index:200100; pointer-events:none; background:#ffcc28; transform:scaleX(0); transform-origin:left center; border-right:6px solid #15171a; }
 html.page-leaving .page-wipe { animation:page-cover 240ms cubic-bezier(.6,0,.3,1) both; pointer-events:auto; }
 html.page-arriving .page-wipe { animation:page-uncover 360ms cubic-bezier(.6,0,.3,1) both; pointer-events:auto; }
@@ -47,7 +47,7 @@ html.page-arriving .page-wipe { animation:page-uncover 360ms cubic-bezier(.6,0,.
 @keyframes page-cover { from { transform:scaleX(0); } to { transform:scaleX(1); } }
 @keyframes page-uncover { from { transform:scaleX(1); transform-origin:right center; } to { transform:scaleX(0); transform-origin:right center; } }
 @media(max-width:480px) { #quick-command kbd { display:none; } .command-head h2 { font-size:20px; } .share-notice { bottom:76px; } }
-@media(prefers-reduced-motion:reduce) { html[data-language-motion] [data-es], html[data-language-motion] #hero-title-line, html[data-language-motion] .state-label, html[data-language-motion] #status-time, html[data-language-motion] [data-v4-copy] { transition:none!important; } .page-wipe { display:none!important; } #command-dialog[open], .share-notice:not([hidden]), #share-site.is-copied { animation:none!important; } }
+@media(prefers-reduced-motion:reduce) { html[data-language-motion] [data-es], html[data-language-motion] #hero-title-line, html[data-language-motion] .state-label, html[data-language-motion] #status-time, html[data-language-motion] [data-v4-copy] { transition:none!important; } .page-wipe { display:none!important; } #command-dialog[open], .share-notice:not([hidden]), :is(#share-site,#share-site-secondary).is-copied { animation:none!important; } }
 #command-dialog { position:fixed; inset:0; margin:auto; }
 #command-dialog:not([open]) { display:none; }
 

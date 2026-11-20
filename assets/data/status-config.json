@@ -1,6 +1,25 @@
 {
-  "landing": {"url":"https://smdzstudios.com/"},
-  "store": {"url":"https://smdz-studios.tebex.io/"},
-  "docs": {"url":"https://docs.smdz-studios.com/"},
-  "discord": {"url":"https://discord.com/api/v10/invites/6HPcHR4N8m?with_counts=true","invite":"6HPcHR4N8m"}
+  "landing": {
+    "url": "https://smdzstudios.com/"
+  },
+  "store": {
+    "url": "https://smdz-studios.tebex.io/",
+    "browser_fallback": true,
+    "expected_brand": "SMDZ Studios"
+  },
+  "docs": {
+    "url": "https://docs.smdz-studios.com/"
+  },
+  "discord": {
+    "url": "https://discord.com/api/v10/invites/6HPcHR4N8m?with_counts=true",
+    "invite": "6HPcHR4N8m"
+  },
+  "rewards": {
+    "url": "https://tebex-api-smdz.sergioramonlopezmadrid.workers.dev/api/rewards/config",
+    "json_probe": "rewards"
+  },
+  "giveaways": {
+    "url": "https://tebex-api-smdz.sergioramonlopezmadrid.workers.dev/api/giveaways/live",
+    "json_probe": "giveaways"
+  }
 }
