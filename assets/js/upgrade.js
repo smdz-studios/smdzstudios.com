@@ -2,7 +2,7 @@
   'use strict';
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const ns='http://www.w3.org/2000/svg';
-  document.querySelectorAll('#studio,#custom-work').forEach(section=>{
+  document.querySelectorAll('#studio,#technologies,#custom-work').forEach(section=>{
     const svg=document.createElementNS(ns,'svg');svg.classList.add('draw-border');svg.setAttribute('aria-hidden','true');
     const rect=document.createElementNS(ns,'rect');rect.setAttribute('pathLength','100');svg.append(rect);section.append(svg);
   });

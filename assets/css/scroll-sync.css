@@ -9,3 +9,5 @@ html.scroll-synced .scroll-drawing:focus-within .draw-border { opacity:0; }
 @media(prefers-reduced-motion:reduce){html.scroll-synced [data-scroll-sync]{opacity:1!important;translate:none!important;scale:1!important;rotate:none!important}html.scroll-synced .scroll-drawing{border-color:var(--bl-line)!important}html.scroll-synced .scroll-drawing .draw-border{opacity:0!important}}
 
 html.scroll-synced [data-scroll-sync]:focus-within [data-scroll-sync] { opacity:1!important; translate:none!important; scale:1!important; rotate:none!important; }
+
+html.scroll-synced [data-reveal][data-scroll-sync] { transform:none; transition:none; }
