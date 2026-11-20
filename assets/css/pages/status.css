@@ -65,8 +65,6 @@
 .status-overview::after,.uptime-history.panel::after{display:none!important;}
 .uptime-day{position:relative;cursor:help;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;}
 .uptime-day:hover,.uptime-day:focus-visible{transform:translateY(-2px);filter:saturate(1.05) brightness(1.04);box-shadow:0 0 0 1px rgba(255,204,40,.5);outline:none;}
-.status-monitor-hint{margin-top:12px;font-size:12px;line-height:1.55;color:var(--bl-ink-muted);}
-.status-monitor-hint strong{color:var(--bl-ink);font-weight:800;}
 .status-data-tooltip{position:fixed;left:0;top:0;z-index:1200;min-width:220px;max-width:280px;padding:12px 13px 11px;border:var(--bl-border-thick);border-radius:14px;background:var(--bl-panel-alt);box-shadow:var(--bl-shadow-lg);pointer-events:none;opacity:0;transform:translateY(6px) scale(.98);transition:opacity .16s ease,transform .16s ease;}
 .status-data-tooltip.is-visible{opacity:1;transform:translateY(0) scale(1);}
 .status-data-tooltip::after{content:"";position:absolute;left:calc(var(--tip-arrow,28px) - 8px);bottom:-9px;width:16px;height:16px;background:var(--bl-panel-alt);border-right:var(--bl-border-thick);border-bottom:var(--bl-border-thick);transform:rotate(45deg);}
@@ -111,3 +109,9 @@
 .uptime-day[data-state=maintenance],.uptime-key i[data-state=maintenance],.uptime-current[data-state=maintenance]::before{background:#a78bfa;}
 .uptime-official-link{color:var(--bl-ink);text-decoration:underline;text-underline-offset:3px;}
 .uptime-official-link:hover{color:#ffcc28;}
+
+.uptime-title-group{flex:0 1 auto;gap:13px;align-items:center;}
+.uptime-title-group h2{margin:0;}
+.uptime-heading{gap:16px 20px;}
+.uptime-period{flex:1 1 300px;}
+@media(max-width:620px){.uptime-period{flex-basis:100%;}.uptime-title-group .status-live-icon{width:38px;height:38px;}}

@@ -109,15 +109,15 @@ def main():
         raise ValueError('Invalid existing history')
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
         results = dict(zip(config, executor.map(probe, config.values())))
-    services = {name: [sample for sample in rows if now-90*86400 <= sample[0] <= now] for name, rows in previous['services'].items() if name not in config and isinstance(rows, list)}
+    services = {name: [sample for sample in rows if now-366*86400 <= sample[0] <= now] for name, rows in previous['services'].items() if name not in config and isinstance(rows, list)}
     for name, result in results.items():
-        samples = [sample for sample in previous['services'].get(name, []) if now-90*86400 <= sample[0] <= now]
+        samples = [sample for sample in previous['services'].get(name, []) if now-366*86400 <= sample[0] <= now]
         if samples and samples[-1][0] == now:
             samples.pop()
         samples.append([now, *result])
         services[name] = samples
         print(name, *result)
-    data = {'version': 1, 'updated': now, 'intervalMinutes': 60, 'services': services}
+    data = {'version': 1, 'updated': now, 'intervalMinutes': 30, 'services': services}
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_suffix('.tmp')
     temporary.write_text(json.dumps(data, separators=(',', ':'))+'\n')

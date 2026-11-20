@@ -18,5 +18,7 @@ window.SMDZ_SITE_CONFIG = Object.freeze({
       it: 'Stiamo lavorando a dei miglioramenti. Torna presto.'
     }
   },
+  // Visible Status page refresh interval in seconds (15–300). Does not trigger GitHub Actions.
+  uptimeRefreshSeconds: 30,
   uptimeDataUrl: 'https://raw.githubusercontent.com/smdz-studios/smdzstudios.com/uptime-data/history.json'
 });
