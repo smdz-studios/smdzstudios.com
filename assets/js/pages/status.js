@@ -109,9 +109,6 @@
       const key=service.key,name=typeof service.name==='string'?service.name:service.name[lang],all=history?.services?.[key]||[],samples=all.filter(x=>x[0]>=start&&x[0]<=now),known=samples.filter(x=>['up','failed','degraded'].includes(x[1])),success=known.filter(x=>x[1]==='up'); any ||= samples.length>0;
       const line=make('article','uptime-service'),head=make('div','uptime-service-head'),nameNode=make('h3','',name),summary=make('div','uptime-summary');
       summary.append(make('span','',key==='tebex'?officialCopy[lang][7]:t[3]),make('strong','',known.length?pct.format(success.length/known.length):'—'),make('span','',`${num.format(known.length)}/${num.format(samples.length)} ${t[13]}`));
-      const serviceCoverage=new Set(samples.map(x=>Math.min(buckets-1,Math.floor((x[0]-start)/step)))).size;
-      const coverageText=make('span','uptime-service-coverage',`${serviceCoverage}/${buckets} ${coverageCopy[lang][2]}`);
-      summary.append(coverageText);
       const identity=make('div','uptime-service-identity'),state=states.get(key)||'unknown',indicator=make('span','uptime-current',statusText(state,lang)); indicator.dataset.state=state; indicator.dataset.tipKey=key+'-current'; indicator.tabIndex=0; const latestSample=all.at(-1); bindTip(indicator,()=>currentTooltip(name,state,latestSample,key==='tebex')); identity.append(nameNode,indicator); head.append(identity,summary); line.append(head);
       const days=Array.from({length:buckets},()=>[]); for(const x of samples){const i=Math.min(buckets-1,Math.floor((x[0]-start)/step)); if(days[i]) days[i].push(x);}
       const recordedBuckets=days.filter(day=>day.length).length;
