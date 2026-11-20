@@ -89,6 +89,7 @@
     const colorMap={up:'#66d98c',failed:'#ef535b',unknown:'#92959e',mixed:'#ffcc28',degraded:'#ffcc28',maintenance:'#a78bfa',partial:'#7ca7fa',empty:'#4b4f59'};
     return `<h4>${serviceName}</h4><div class="tooltip-date">${dateText}</div><div class="tooltip-state" style="--tooltip-state-color:${colorMap[stateKey]||colorMap.unknown}">${label}</div><div class="tooltip-grid"><span>${tc.availability}</span><strong>${availabilityText}</strong><span>${tc.checks}</span><strong>${stats.total}</strong><span>${tc.successful}</span><strong>${stats.up}</strong><span>${tc.failedCount}</span><strong>${stats.failed}</strong><span>${tc.unknownCount}</span><strong>${stats.unknown}</strong>${stats.degraded?`<span>${officialCopy[lang][0]}</span><strong>${stats.degraded}</strong>`:''}${stats.maintenance?`<span>${officialCopy[lang][1]}</span><strong>${stats.maintenance}</strong>`:''}</div><div class="tooltip-note">${emptyReason||periodCopy[lang][9]}</div>`;
   }
+  const recordedCopy={en:'Only intervals with actual measurements are displayed; missing periods are omitted.',es:'Solo se muestran intervalos con mediciones reales; se omiten los períodos sin datos.',fr:'Seuls les intervalles réellement mesurés sont affichés ; les périodes sans données sont omises.',de:'Es werden nur tatsächlich gemessene Intervalle angezeigt; Zeiträume ohne Daten werden ausgelassen.',pt:'São mostrados apenas os intervalos com medições reais; os períodos sem dados são omitidos.',it:'Vengono mostrati solo gli intervalli con misurazioni reali; i periodi senza dati vengono omessi.'};
   function drawHistory(preserveInteraction=false){
     const previousTarget=preserveInteraction&&tipTarget&&historyRows.contains(tipTarget)?tipTarget:null;
     const activeKey=previousTarget?.dataset.tipKey;
@@ -102,21 +103,6 @@
     historyPanel.querySelector('[data-uptime-label="15"]').textContent=hourly?periodCopy[lang][5]:weekly?longPeriodCopy[lang][2]:t[15];
     const hourRange=new Intl.DateTimeFormat(lang,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'UTC',hourCycle:'h23'});
     const note=document.getElementById('uptime-empty'); note.textContent=loadFailed?t[8]:!history?t[7]:now-history.updated>FRESH_SECONDS?t[9]:''; note.hidden=!note.textContent;
-    let coverage=document.getElementById('uptime-coverage');
-    if(!coverage){
-      coverage=make('div','uptime-coverage'); coverage.id='uptime-coverage';
-      const label=make('span','uptime-coverage-label'); label.id='uptime-coverage-label';
-      const track=make('div','uptime-coverage-track'); track.setAttribute('role','progressbar'); track.setAttribute('aria-valuemin','0'); track.setAttribute('aria-valuemax','100'); track.id='uptime-coverage-track';
-      const fill=make('div','uptime-coverage-fill'); fill.id='uptime-coverage-fill'; track.append(fill);
-      coverage.append(label,track);historyPanel.querySelector('.uptime-key').before(coverage);
-    }
-    const covered=new Set((history?.services?.landing||[]).filter(x=>x[0]>=start&&x[0]<=now).map(x=>Math.min(buckets-1,Math.floor((x[0]-start)/step)))).size;
-    const ratio=buckets?covered/buckets:0;
-    coverage.hidden=!history; coverage.classList.toggle('is-low',ratio<.6);
-    document.getElementById('uptime-coverage-label').textContent=`${coverageCopy[lang][0]} · ${covered} ${coverageCopy[lang][1]} ${buckets} ${coverageCopy[lang][2]}`;
-    const coverageTrack=document.getElementById('uptime-coverage-track'); coverageTrack.setAttribute('aria-valuenow',String(Math.round(ratio*100)));
-    coverageTrack.setAttribute('aria-valuetext',`${covered} ${coverageCopy[lang][1]} ${buckets}`);
-    document.getElementById('uptime-coverage-fill').style.width=`${Math.max(0,Math.min(100,ratio*100))}%`;
     document.getElementById('maintenance-status').hidden=window.SMDZ_SITE_CONFIG?.maintenance?.enabled!==true;
     if(!chartTarget)hideTooltip(); historyRows.replaceChildren(); incidentList.replaceChildren(); let incidents=[], any=false;
     for(const service of services){
@@ -128,8 +114,10 @@
       summary.append(coverageText);
       const identity=make('div','uptime-service-identity'),state=states.get(key)||'unknown',indicator=make('span','uptime-current',statusText(state,lang)); indicator.dataset.state=state; indicator.dataset.tipKey=key+'-current'; indicator.tabIndex=0; const latestSample=all.at(-1); bindTip(indicator,()=>currentTooltip(name,state,latestSample,key==='tebex')); identity.append(nameNode,indicator); head.append(identity,summary); line.append(head);
       const days=Array.from({length:buckets},()=>[]); for(const x of samples){const i=Math.min(buckets-1,Math.floor((x[0]-start)/step)); if(days[i]) days[i].push(x);}
-      const bars=make('div','uptime-bars'); bars.style.setProperty('--days',buckets); bars.setAttribute('role','group'); bars.setAttribute('aria-label',`${name}: ${t[3]} ${known.length?pct.format(success.length/known.length):t[12]}`);
+      const recordedBuckets=days.filter(day=>day.length).length;
+      const bars=make('div','uptime-bars'); bars.style.setProperty('--days',Math.max(1,recordedBuckets)); bars.setAttribute('aria-description',recordedCopy[lang]); bars.setAttribute('role','group'); bars.setAttribute('aria-label',`${name}: ${t[3]} ${known.length?pct.format(success.length/known.length):t[12]}`);
       days.forEach((day,i)=>{
+        if(!day.length)return;
         const up=day.filter(x=>x[1]==='up').length, fail=day.filter(x=>x[1]==='failed').length, degraded=day.filter(x=>x[1]==='degraded').length, maintenance=day.filter(x=>x[1]==='maintenance').length, unknown=day.length-up-fail-degraded-maintenance;
         const bar=make('span','uptime-day');
         const stateKey=fail?(up?'mixed':'failed'):degraded?'degraded':maintenance?'maintenance':up?(unknown?'partial':'up'):unknown?'unknown':'empty';
@@ -144,8 +132,10 @@
         bindTip(bar,()=>tooltipHtml(name,dateText,stateKey,stats,availabilityText,reason));
         bars.append(bar);
       });
-      line.append(bars);
-      const axis=make('div','uptime-axis'); axis.append(make('span','',(hourly?hourRange:dayFormat).format(new Date(start*1000))),make('span','',(hourly?hourRange:dayFormat).format(new Date(end*1000)))); line.append(axis);
+      if(recordedBuckets){
+        line.append(bars);
+        const axis=make('div','uptime-axis'); axis.append(make('span','',(hourly?hourRange:dayFormat).format(new Date(samples[0][0]*1000))),make('span','',(hourly?hourRange:dayFormat).format(new Date(samples.at(-1)[0]*1000))));line.append(axis);
+      }else line.append(make('p','uptime-note',t[7]));
       const latest=all.at(-1);
       if(key==='tebex'){
         const o=officialCopy[lang], note=make('p','uptime-feature-note',o[4]+' '), link=make('a','uptime-official-link',o[5]);
