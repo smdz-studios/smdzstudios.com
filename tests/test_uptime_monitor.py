@@ -1,11 +1,13 @@
+import importlib.util
 import pathlib
-import sys
 import unittest
 import urllib.error
 from unittest.mock import patch
 
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'tools'))
-import uptime_monitor as monitor
+source = pathlib.Path(__file__).resolve().parents[1] / 'tools' / 'uptime-monitor.py'
+spec = importlib.util.spec_from_file_location('uptime_monitor', source)
+monitor = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(monitor)
 
 
 def tebex_payload(webstores='operational', checkout='operational'):
