@@ -2,7 +2,7 @@
   'use strict';
   const section=document.getElementById('faq');
   if(!section)return;
-  const input=section.querySelector('#faq-search'),list=section.querySelector('#faq-list'),empty=section.querySelector('#faq-empty'),count=section.querySelector('#faq-count');
+  const list=section.querySelector('#faq-list');
   const icon='<svg class="faq-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
   const root=document.documentElement;
   const entries=[
@@ -71,14 +71,6 @@
       it:['Posso cambiare lingua o aspetto?','Sì. Usa i controlli in alto per scegliere una delle sei lingue o passare dal tema chiaro a quello scuro. Le preferenze vengono salvate nel browser.']
     }}
   ];
-  const ui={
-    en:{placeholder:'Search questions…',empty:'No questions match your search.',counter:n=>n+' of '+entries.length+' questions',aria:'Search frequently asked questions'},
-    es:{placeholder:'Buscar preguntas…',empty:'No hay preguntas que coincidan.',counter:n=>n+' de '+entries.length+' preguntas',aria:'Buscar preguntas frecuentes'},
-    fr:{placeholder:'Rechercher une question…',empty:'Aucune question correspondante.',counter:n=>n+' sur '+entries.length+' questions',aria:'Rechercher dans les questions fréquentes'},
-    de:{placeholder:'Fragen durchsuchen…',empty:'Keine passenden Fragen gefunden.',counter:n=>n+' von '+entries.length+' Fragen',aria:'Häufig gestellte Fragen durchsuchen'},
-    pt:{placeholder:'Pesquisar perguntas…',empty:'Nenhuma pergunta corresponde à pesquisa.',counter:n=>n+' de '+entries.length+' perguntas',aria:'Pesquisar perguntas frequentes'},
-    it:{placeholder:'Cerca una domanda…',empty:'Nessuna domanda corrispondente.',counter:n=>n+' di '+entries.length+' domande',aria:'Cerca tra le domande frequenti'}
-  };
   const base=new URL('../../../',document.currentScript.src);
   const opened=new Set();
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
@@ -109,16 +101,12 @@
     };
   }
 
-  const normalize=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
-  const current=()=>Object.hasOwn(ui,root.lang)?root.lang:'en';
+  const current=()=>['en','es','fr','de','pt','it'].includes(root.lang)?root.lang:'en';
   function render(){
-    const lang=current(),query=normalize(input.value.trim());
+    const lang=current();
     const fragment=document.createDocumentFragment();
-    let visible=0;
     for(const entry of entries){
       const [question,answer]=entry.text[lang];
-      if(!normalize(question+' '+answer).includes(query))continue;
-      visible++;
       const details=document.createElement('details');details.className='faq-item';details.dataset.id=entry.id;details.open=opened.has(entry.id);
       const summary=document.createElement('summary');summary.className='faq-question';
       const title=document.createElement('span');title.textContent=question;
@@ -139,13 +127,7 @@
       fragment.append(details);
     }
     list.replaceChildren(fragment);
-    empty.hidden=visible!==0;
-    empty.textContent=ui[lang].empty;
-    input.placeholder=ui[lang].placeholder;
-    input.setAttribute('aria-label',ui[lang].aria);
-    count.textContent=ui[lang].counter(visible);
   }
-  input.addEventListener('input',render);
   new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['lang']});
   render();
 })();
