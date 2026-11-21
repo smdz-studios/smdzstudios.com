@@ -414,3 +414,19 @@ html[data-theme="dark"] .error-panel h1,html[data-theme="dark"] .error-panel p{t
 .site-nav .nav-status{--nav-fill:#44d07a;--nav-hover:#60e391;--nav-ink:#102217;}
 .site-nav .site-nav-row-break{flex-basis:100%;height:0;width:0;pointer-events:none;}
 @media(max-width:720px){.site-nav .site-nav-row-break{display:none;}.site-nav .nav-status{grid-column:1/-1;justify-self:center;width:fit-content;max-width:100%;}}
+
+.section-heading-row{display:flex;align-items:center;justify-content:flex-start;gap:clamp(14px,2.6vw,22px);min-width:0;}
+.section-heading-copy{flex:1;min-width:0;}
+.section-heading-icon{flex:none;display:inline-grid;place-items:center;width:75px;height:75px;box-sizing:border-box;border:3px solid #15171a;border-radius:17px;background:#ffcc28;box-shadow:5px 6px 0 #15171a;color:#15171a;transform:none;rotate:none;translate:none;}
+.section-heading-icon .section-icon{display:block;width:43px;height:43px;stroke:currentColor;fill:none;stroke-width:2.45;stroke-linecap:round;stroke-linejoin:round;}
+.studio-heading-row{align-items:flex-start;}
+.studio-heading-row .section-heading-copy .section-title{margin-top:1px;}
+.studio-heading-row .section-heading-copy>p{max-width:510px;color:var(--bl-ink-muted);line-height:1.8;}
+#technologies .tech-heading.section-heading-row{align-items:flex-start;}
+#technologies .tech-heading.section-heading-row .section-title{margin-top:0;}
+.custom-heading-row{align-items:flex-start;margin-bottom:14px;}
+.custom-heading-row .section-heading-copy h2{margin-top:0;}
+.custom-heading-row .section-heading-copy .custom-description{margin:0;}
+.hero-title .section-heading-icon{display:inline-grid;vertical-align:middle;width:clamp(53px,6vw,72px);height:clamp(53px,6vw,72px);margin-right:clamp(10px,2vw,17px);box-shadow:4px 5px 0 #15171a;}
+.hero-title .section-heading-icon .section-icon{width:60%;height:60%;}
+@media(max-width:650px){.section-heading-row{gap:14px;align-items:flex-start;}.section-heading-icon{width:52px;height:52px;border-radius:12px;box-shadow:3px 4px 0 #15171a;}.section-heading-icon .section-icon{width:30px;height:30px;}.hero-title .section-heading-icon{width:clamp(38px,12vw,53px);height:clamp(38px,12vw,53px);margin-right:9px;box-shadow:3px 4px 0 #15171a;}}
