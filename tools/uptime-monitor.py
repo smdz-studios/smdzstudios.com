@@ -8,7 +8,7 @@ import urllib.request
 
 
 def http_state(code, headers):
-    if headers.get('cf-mitigated', '').lower() == 'challenge' or code in (401, 403, 429):
+    if (headers is not None and headers.get('cf-mitigated', '').lower() == 'challenge') or code in (401, 403, 429):
         return 'unknown'
     return 'up' if 200 <= code < 300 else 'failed'
 

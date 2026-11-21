@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/uptime.yml'
       - 'tools/uptime-monitor.py'
+      - 'tests/test_uptime_monitor.py'
       - 'assets/data/status-config.json'
 permissions:
   contents: write
@@ -20,6 +21,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v5
+      - name: Run uptime monitor tests
+        run: python3 -m unittest discover -s tests -p 'test_uptime_monitor.py' -v
       - name: Load history branch
         shell: bash
         run: |
