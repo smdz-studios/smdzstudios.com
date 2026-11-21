@@ -51,6 +51,7 @@
   const language=()=>Object.hasOwn(copy,root.lang)?root.lang:'en';
   const t=()=>copy[language()];
   const x=()=>extra[language()];
+  const copyLabel={en:'Copy HEX',es:'Copiar HEX',fr:'Copier le HEX',de:'HEX kopieren',pt:'Copiar HEX',it:'Copia HEX'};
   const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
   const read=()=>{try{return normalize(localStorage.getItem(storageKey))}catch{return null}};
   const readAlpha=()=>{try{const value=localStorage.getItem(alphaKey);return value===null?100:clamp(Number(value)||0,0,100)}catch{return 100}};
@@ -166,7 +167,7 @@
     plane.setAttribute('aria-label',labels[5]);hueInput.setAttribute('aria-label',labels[1]);alphaInput.setAttribute('aria-label',labels[2]);
     hexInput.setAttribute('aria-label',words.hex);dismiss.setAttribute('aria-label',words.close);
     resetButton.setAttribute('aria-label',words.reset);resetButton.title=words.reset;
-    applyButton.textContent=labels[4];copyButton.setAttribute('aria-label',labels[9]===copy.en?'Copy HEX':words.hex);copyButton.title='Copy HEX';
+    applyButton.textContent=labels[4];copyButton.setAttribute('aria-label',copyLabel[language()]);copyButton.title=copyLabel[language()];
     error.textContent=words.invalid+' ('+labels[11]+')';
     [...presetHost.children].forEach((item,i)=>{item.setAttribute('aria-label',words.names[i]+' · '+presets[i]);item.title=words.names[i]});
     render();
