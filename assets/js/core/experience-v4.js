@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const shortcutScript=document.createElement('script');shortcutScript.src=new URL('keyboard-help.js',document.currentScript.src).href;document.head.append(shortcutScript);
-  const colorScript=document.createElement('script');colorScript.src=new URL('accent-picker.js',document.currentScript.src).href;document.head.append(colorScript);
+  const colorScript=document.createElement('script');colorScript.src=new URL('accent-picker.js?v=20261121-boldline-v18',document.currentScript.src).href;document.head.append(colorScript);
   const root=document.documentElement, config=window.SMDZ_SITE_CONFIG||{}, reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const copy={
     en:['Quick commands','Search commands…','No matching commands','↑ ↓ Navigate · Enter Open · Esc Close','Home','About me','Custom development','Store','Documentation','Discord','Cfx.re profile','Service status','Share website','Link copied!','Could not copy the link','Copy the website link','Available for custom work','Limited availability','Not accepting new projects','Ask about availability','Close','Day in Madrid','Night in Madrid','Languages & technologies','Frequently asked questions'],
