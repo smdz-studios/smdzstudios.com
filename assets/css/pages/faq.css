@@ -1,9 +1,8 @@
 .faq-section{width:min(1040px,calc(100% - 44px));margin:4px auto clamp(66px,9vw,110px);scroll-margin-top:45px;}
-.faq-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px;}
-.faq-heading h2{font:italic 900 clamp(35px,5vw,60px)/.99 var(--bl-font-display);text-transform:uppercase;letter-spacing:-.025em;margin:8px 0 11px;}
+.faq-heading{display:flex;align-items:center;justify-content:flex-start;gap:22px;margin-bottom:24px;}
+.faq-heading-copy{flex:1;min-width:0;}
+.faq-heading h2{font:italic 900 clamp(35px,5vw,60px)/.99 var(--bl-font-display);text-transform:uppercase;letter-spacing:-.025em;margin:0 0 10px;overflow-wrap:anywhere;}
 .faq-heading p{font-size:14px;line-height:1.65;color:var(--bl-ink-muted);max-width:560px;}
-.faq-eyebrow{display:flex;align-items:center;gap:9px;font-weight:850;font-size:11px;letter-spacing:.12em;color:var(--bl-ink-muted);}
-.faq-eyebrow::before{content:"";height:4px;width:25px;background:var(--bl-accent);border:1px solid var(--bl-line);border-radius:4px;}
 .faq-graphic{flex:none;display:grid;place-items:center;width:75px;height:75px;background:#ffcc28;border:3px solid #15171a;border-radius:17px;box-shadow:5px 6px 0 #15171a;transform:rotate(5deg);color:#15171a;}
 .faq-graphic svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .faq-controls{display:flex;align-items:center;gap:16px;justify-content:space-between;margin-bottom:17px;}
@@ -46,7 +45,9 @@
 .faq-section .faq-toggle-icon{transition:transform 250ms cubic-bezier(.18,.85,.25,1.2),background 200ms ease;}
 .faq-section .faq-item[open] .faq-toggle-icon{transform:rotate(45deg);}
 .faq-section .faq-search{box-shadow:2px 3px 0 var(--bl-line);}
-.faq-section .faq-graphic{transform:rotate(4deg);}
+.faq-section .faq-graphic{transform:rotate(-4deg);}
 @media(max-width:720px){.faq-section.panel{width:calc(100% - 36px);padding:clamp(20px,5vw,30px);margin:30px auto 38px;}}
 @media(max-width:650px){.faq-section .faq-question{padding:15px 4px;}.faq-section .faq-answer{padding:0 4px 18px;}}
 @media(prefers-reduced-motion:reduce){.faq-section .faq-item,.faq-section .faq-toggle-icon{transition:none;}}
+
+@media(max-width:650px){.faq-section .faq-heading{align-items:flex-start;gap:15px;}.faq-section .faq-graphic{width:52px;height:52px;border-radius:12px;}.faq-section .faq-graphic svg{width:32px;height:32px;}.faq-section .faq-heading h2{margin:0 0 8px;line-height:1.04;}}
