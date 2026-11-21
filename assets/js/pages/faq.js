@@ -3,6 +3,8 @@
   const section=document.getElementById('faq');
   if(!section)return;
   const list=section.querySelector('#faq-list');
+  if(!list)return;
+  section.querySelectorAll('.faq-controls, .faq-empty').forEach(element=>element.remove());
   const icon='<svg class="faq-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
   const root=document.documentElement;
   const entries=[
