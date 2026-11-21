@@ -12,7 +12,7 @@ html[data-theme=dark] .invite-page .ambient-overlay { background:linear-gradient
 .invite-discord-icon { width:29px; height:29px; fill:currentColor; stroke:none; flex:none; }
 .invite-content h1 { font:italic 900 clamp(37px,7vw,66px)/.99 var(--bl-font-display); text-transform:uppercase; color:var(--bl-ink); letter-spacing:-.035em; overflow-wrap:anywhere; }
 .invite-accent { color:var(--bl-accent-dark); position:relative; display:inline-block; }
-html[data-theme=dark] .invite-accent { color:#ffcc28; }
+html[data-theme=dark] .invite-accent { color:var(--bl-accent); }
 .invite-accent::after { content:""; position:absolute; left:0; right:0; bottom:-8px; height:9px; background:url('../../images/brush-underline.svg') center/100% 100% no-repeat; transform-origin:left; animation:invite-brush 650ms 420ms both; }
 .invite-description { color:var(--bl-ink-muted); max-width:440px; font-size:15px; line-height:1.65; margin-top:8px; }
 .invite-members { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:9px 23px; color:var(--bl-ink-muted); font-size:13px; }
@@ -25,7 +25,7 @@ html[data-theme=dark] .invite-accent { color:#ffcc28; }
 .invite-countdown-line { display:flex; align-items:center; gap:12px; justify-content:space-between; color:var(--bl-ink-muted); font-size:13px; font-weight:700; }
 .invite-countdown-line strong { color:var(--bl-ink); font-size:18px; font-variant-numeric:tabular-nums; }
 .invite-progress { height:12px; margin:9px 0 5px; background:var(--bl-panel-alt); border:2px solid #15171a; border-radius:5px; overflow:hidden; }
-.invite-progress i { display:block; height:100%; width:100%; background:#ffcc28; transform-origin:left center; transform:scaleX(var(--invite-progress,0)); }
+.invite-progress i { display:block; height:100%; width:100%; background:var(--bl-accent); transform-origin:left center; transform:scaleX(var(--invite-progress,0)); }
 .invite-pause { line-height:1.5; font-family:inherit; font-size:12px; font-weight:700; color:var(--bl-ink-muted); background:transparent; border:0; padding:6px 0 2px; cursor:pointer; text-decoration:underline; }
 .invite-join.btn { width:min(440px,100%); min-height:58px; background:#5865f2; color:#fff; margin-top:3px; font-size:clamp(15px,3.4vw,20px); text-align:center; white-space:normal; justify-content:center; }
 .invite-join.btn:hover { background:#4752c4; color:#fff; }

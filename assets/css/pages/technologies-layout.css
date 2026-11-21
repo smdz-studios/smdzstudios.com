@@ -15,14 +15,14 @@
 #technologies.studio-technologies.panel {
   box-sizing:border-box; display:block; position:relative; width:min(1080px,calc(100% - 64px)); max-width:100%; min-width:0; margin:0 auto 44px; padding:clamp(22px,4.3vw,48px); background:var(--bl-panel); border:var(--bl-border-thick); border-radius:var(--bl-radius-lg); box-shadow:var(--bl-shadow-lg); scroll-margin-top:28px;
 }
-#technologies::before { content:"";position:absolute;top:20px;bottom:20px;left:-3px;width:6px;border:2px solid #15171a;border-radius:3px;background:#ffcc28; }
+#technologies::before { content:"";position:absolute;top:20px;bottom:20px;left:-3px;width:6px;border:2px solid #15171a;border-radius:3px;background:var(--bl-accent); }
 #technologies .tech-heading { margin:0 0 24px; padding-bottom:20px; border-bottom:1px solid var(--bl-divider); }
 #technologies .section-title { margin:0 0 8px; font:italic 900 clamp(30px,4.2vw,48px)/1.05 var(--bl-font-display); text-transform:uppercase; letter-spacing:-.025em; overflow-wrap:anywhere; }
 #technologies .tech-heading p { margin:0; color:var(--bl-ink-muted); font-size:14px; line-height:1.55; }
 #technologies .tech-groups { display:grid; grid-template-columns:minmax(0,4fr) minmax(0,3fr); gap:24px clamp(22px,3.5vw,42px); }
 #technologies .tech-group { min-width:0; }
 #technologies .tech-group h3 { display:flex; align-items:center; gap:8px; margin:0 0 18px; color:var(--bl-ink); font:italic 800 clamp(16px,1.8vw,21px)/1.15 var(--bl-font-display); text-transform:uppercase; overflow-wrap:anywhere; }
-#technologies .tech-group h3::before { content:""; width:7px;height:7px;flex:none;background:#ffcc28;border:1px solid #15171a;box-shadow:1px 1px 0 #15171a;transform:rotate(-8deg); }
+#technologies .tech-group h3::before { content:""; width:7px;height:7px;flex:none;background:var(--bl-accent);border:1px solid #15171a;box-shadow:1px 1px 0 #15171a;transform:rotate(-8deg); }
 #technologies .tech-list { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px 8px; }
 #technologies .tech-group:nth-child(2) .tech-list { grid-template-columns:repeat(3,minmax(0,1fr)); }
 #technologies .tech-item { list-style:none; min-width:0; display:flex; flex-direction:column; align-items:center; text-align:center; gap:9px; padding:6px 0 8px; }

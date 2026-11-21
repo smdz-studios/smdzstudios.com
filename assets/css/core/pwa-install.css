@@ -2,7 +2,7 @@
 .smdz-install-dialog::backdrop{background:rgba(9,10,14,.79);animation:smdz-install-backdrop .2s ease both;}
 .smdz-install-dialog.is-closing{animation:smdz-install-out .18s ease-in both;}
 .smdz-install-dialog.is-closing::backdrop{animation:smdz-install-backdrop-out .18s ease-in both;}
-.smdz-install-accent{position:absolute;top:0;left:0;right:0;height:6px;background:#ffcc28;}
+.smdz-install-accent{position:absolute;top:0;left:0;right:0;height:6px;background:var(--bl-accent);}
 .smdz-install-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:3px 0 7px;}
 .smdz-install-kicker{font-size:11px;letter-spacing:.09em;font-weight:850;color:var(--bl-ink-muted,#b6b9c0);}
 .smdz-install-close{display:grid;place-items:center;width:37px;height:37px;border:2px solid #101114;border-radius:9px;background:#e44850;color:#fff;box-shadow:2px 3px 0 #101114;cursor:pointer;transition:transform .16s ease,box-shadow .16s ease;}
@@ -14,10 +14,10 @@
 .smdz-install-dialog #smdz-install-intro{font-size:14px;line-height:1.55;text-align:center;color:var(--bl-ink-muted,#b6b9c0);margin:0 0 18px;}
 .smdz-install-benefits{border-top:1px solid var(--bl-divider,#53565d);border-bottom:1px solid var(--bl-divider,#53565d);margin:0 0 16px;padding:9px 0;}
 .smdz-install-benefits>div{display:flex;align-items:center;gap:13px;padding:8px 0;font-size:13px;line-height:1.42;font-weight:700;}
-.smdz-install-benefits svg{flex:none;width:29px;height:29px;padding:5px;border:2px solid #101114;border-radius:9px;box-sizing:border-box;background:#ffcc28;color:#101114;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.smdz-install-benefits svg{flex:none;width:29px;height:29px;padding:5px;border:2px solid #101114;border-radius:9px;box-sizing:border-box;background:var(--bl-accent);color:var(--bl-on-accent);stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .smdz-install-note{display:flex;align-items:flex-start;gap:9px;font-size:12px;line-height:1.5;color:var(--bl-ink-muted,#b6b9c0);margin:0 0 17px;}
-.smdz-install-note svg{width:17px;height:17px;flex:none;color:#ffcc28;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
-.smdz-install-manual{border:1px solid var(--bl-divider,#53565d);border-left:4px solid #ffcc28;border-radius:8px;padding:10px 12px;margin-bottom:15px;font-size:12px;line-height:1.5;}
+.smdz-install-note svg{width:17px;height:17px;flex:none;color:var(--bl-accent);fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;}
+.smdz-install-manual{border:1px solid var(--bl-divider,#53565d);border-left:4px solid var(--bl-accent);border-radius:8px;padding:10px 12px;margin-bottom:15px;font-size:12px;line-height:1.5;}
 .smdz-install-manual[hidden]{display:none;}
 .smdz-install-manual strong{display:block;margin-bottom:4px;font-size:11px;letter-spacing:.04em;}
 .smdz-install-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -25,9 +25,9 @@
 .smdz-install-actions button:hover{transform:translateY(-2px);box-shadow:4px 6px 0 #101114;}
 .smdz-install-actions button:active{transform:translateY(2px);box-shadow:1px 2px 0 #101114;}
 .smdz-install-secondary{background:var(--bl-panel-alt,#41444a);color:var(--bl-ink,#f4f5f7);}
-.smdz-install-primary{background:#ffcc28;color:#15171a;}
+.smdz-install-primary{background:var(--bl-accent);color:var(--bl-on-accent);}
 .smdz-install-primary svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
-.smdz-install-dialog button:focus-visible{outline:3px solid #ffcc28;outline-offset:3px;}
+.smdz-install-dialog button:focus-visible{outline:3px solid var(--bl-accent);outline-offset:3px;}
 @keyframes smdz-install-enter{from{opacity:0;transform:translateY(22px) scale(.92) rotate(-.7deg);}to{opacity:1;transform:none;}}
 @keyframes smdz-install-out{to{opacity:0;transform:translateY(15px) scale(.96);}}
 @keyframes smdz-install-backdrop{from{opacity:0;}to{opacity:1;}}
