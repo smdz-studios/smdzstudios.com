@@ -120,7 +120,6 @@
   }
   [hue,saturation,brightness]=rgbToHsv(chosen());
   updateScheme();
-  const host=document.querySelector('.header-actions');
   if(!host)return;
   const base=new URL('../../../',document.currentScript.src);
   const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';
