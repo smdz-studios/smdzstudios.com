@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#111215">
+<title>Offline | SMDZ Studios</title>
+<base href="/">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="assets/icons/favicon-32x32.png" sizes="32x32">
+<link rel="stylesheet" href="assets/css/pages/offline.css">
+<script>
+(() => {
+  const root=document.documentElement;
+  try {root.dataset.theme=localStorage.getItem('smdz-bl-theme')==='light'?'light':'dark';}catch{}
+})();
+</script>
+</head>
+<body>
+<main class="offline-main">
+  <img class="offline-logo" src="assets/images/smdz-logo.png" alt="SMDZ Studios" draggable="false" width="944" height="678">
+  <div class="offline-label"><span class="offline-dot" aria-hidden="true"></span><span data-translate="kicker">CONNECTION UNAVAILABLE</span></div>
+  <h1><span data-translate="heading">YOU'RE</span> <span class="offline-highlight" data-translate="highlight">OFFLINE.</span></h1>
+  <p class="offline-description" data-translate="description">The website couldn't be reached. Check your connection and try again, or open the saved homepage if this app has been installed.</p>
+  <div class="offline-actions">
+    <button type="button" class="offline-retry" id="offline-retry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.6-6.4M3 4v6h6"/></svg><span data-translate="retry">TRY AGAIN</span></button>
+    <a class="offline-saved" id="offline-saved" href="index.html?offline=cache"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span data-translate="saved">SAVED HOMEPAGE</span></a>
+  </div>
+  <p class="offline-note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-9v1"/></svg><span data-translate="note">Live status and external services need an internet connection. Saved pages may show outdated information.</span></p>
+</main>
+<footer class="offline-footer">© 2025 SMDZ STUDIOS <span aria-hidden="true">•</span> <span data-translate="footer">INDEPENDENT DEVELOPMENT STUDIO</span></footer>
+<script>
+(() => {
+  const copy={
+    en:{kicker:'CONNECTION UNAVAILABLE',heading:"YOU'RE",highlight:'OFFLINE.',description:"The website couldn't be reached. Check your connection and try again, or open the saved homepage if this app has been installed.",retry:'TRY AGAIN',saved:'SAVED HOMEPAGE',note:'Live status and external services need an internet connection. Saved pages may show outdated information.',footer:'INDEPENDENT DEVELOPMENT STUDIO',page:'Offline | SMDZ Studios'},
+    es:{kicker:'CONEXIÓN NO DISPONIBLE',heading:'ESTÁS',highlight:'SIN CONEXIÓN.',description:'No hemos podido acceder a la web. Comprueba tu conexión e inténtalo de nuevo, o abre la portada guardada si has instalado la aplicación.',retry:'REINTENTAR',saved:'PORTADA GUARDADA',note:'El monitor en directo y los servicios externos requieren Internet. Las páginas guardadas pueden mostrar información antigua.',footer:'ESTUDIO INDEPENDIENTE DE DESARROLLO',page:'Sin conexión | SMDZ Studios'},
+    fr:{kicker:'CONNEXION INDISPONIBLE',heading:'VOUS ÊTES',highlight:'HORS LIGNE.',description:'Impossible de joindre le site. Vérifiez votre connexion puis réessayez, ou ouvrez la page d’accueil enregistrée si l’application est installée.',retry:'RÉESSAYER',saved:'ACCUEIL ENREGISTRÉ',note:'Le statut en direct et les services externes nécessitent Internet. Les pages enregistrées peuvent contenir des informations anciennes.',footer:'STUDIO DE DÉVELOPPEMENT INDÉPENDANT',page:'Hors ligne | SMDZ Studios'},
+    de:{kicker:'KEINE VERBINDUNG',heading:'DU BIST',highlight:'OFFLINE.',description:'Die Website ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut oder öffne die gespeicherte Startseite, wenn die App installiert ist.',retry:'ERNEUT VERSUCHEN',saved:'GESPEICHERTE STARTSEITE',note:'Live-Status und externe Dienste benötigen Internet. Gespeicherte Seiten können veraltete Informationen zeigen.',footer:'UNABHÄNGIGES ENTWICKLUNGSSTUDIO',page:'Offline | SMDZ Studios'},
+    pt:{kicker:'LIGAÇÃO INDISPONÍVEL',heading:'ESTÁS',highlight:'OFFLINE.',description:'Não foi possível aceder ao site. Verifica a ligação e tenta novamente ou abre a página inicial guardada se tiveres instalado a aplicação.',retry:'TENTAR NOVAMENTE',saved:'INÍCIO GUARDADO',note:'O estado em direto e os serviços externos precisam de Internet. As páginas guardadas podem ter informações desatualizadas.',footer:'ESTÚDIO INDEPENDENTE DE DESENVOLVIMENTO',page:'Sem ligação | SMDZ Studios'},
+    it:{kicker:'CONNESSIONE NON DISPONIBILE',heading:'SEI',highlight:'OFFLINE.',description:'Impossibile raggiungere il sito. Controlla la connessione e riprova oppure apri la pagina iniziale salvata se hai installato l’app.',retry:'RIPROVA',saved:'HOME SALVATA',note:'Lo stato dei servizi in tempo reale e i collegamenti esterni richiedono Internet. Le pagine salvate potrebbero non essere aggiornate.',footer:'STUDIO DI SVILUPPO INDIPENDENTE',page:'Offline | SMDZ Studios'}
+  };
+  let pref;
+  try{pref=localStorage.getItem('smdz-landing-language');}catch{}
+  const detected=(navigator.languages||[navigator.language]).map(x=>String(x).split(/[-_]/)[0].toLowerCase()).find(x=>Object.hasOwn(copy,x));
+  const lang=Object.hasOwn(copy,pref)?pref:detected||'en',t=copy[lang];
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-translate]').forEach(el=>{el.textContent=t[el.dataset.translate];});
+  document.title=t.page;
+  const home=document.getElementById('offline-saved');
+  const sw=navigator.serviceWorker?.controller?.scriptURL;
+  const base=new URL('./',sw?new URL(sw):new URL('/sw.js',location.href));
+  home.href=new URL('index.html?offline=cache',base).href;
+  document.getElementById('offline-retry').addEventListener('click',()=>location.reload());
+})();
+</script>
+</body>
+</html>

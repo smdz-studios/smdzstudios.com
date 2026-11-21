@@ -1,0 +1,26 @@
+.keyboard-help-trigger{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:61px;min-height:37px;padding:7px 10px!important;}
+.keyboard-help-trigger>.icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.keyboard-help-trigger kbd{font:800 13px/1 var(--bl-font-body);background:var(--bl-panel-alt);padding:3px 7px;border:1px solid var(--bl-subline);border-radius:5px;}
+.keyboard-help-dialog{position:fixed;inset:0;width:min(570px,calc(100% - 28px));max-height:min(88svh,720px);margin:auto;padding:0;overflow:auto;overscroll-behavior:contain;border:3px solid var(--bl-line,#15171a);border-radius:17px;background:var(--bl-panel,#303238);color:var(--bl-ink);box-shadow:6px 8px 0 var(--bl-line),0 24px 80px rgba(0,0,0,.4);animation:keyboard-help-in .25s cubic-bezier(.18,.85,.24,1.12) both;}
+.keyboard-help-dialog::backdrop{background:rgba(10,11,15,.78);animation:keyboard-help-backdrop .2s both;}
+.keyboard-help-dialog.is-closing{animation:keyboard-help-out .16s ease-in both;}
+.keyboard-help-dialog:focus-visible{outline:none;}
+.keyboard-help-head{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:22px 24px 17px;border-top:7px solid #ffcc28;border-bottom:1px solid var(--bl-divider);}
+.keyboard-help-eyebrow{font-weight:850;font-size:10px;letter-spacing:.12em;color:var(--bl-ink-muted);}
+.keyboard-help-head h2{font:italic 900 clamp(27px,5vw,38px)/1.08 var(--bl-font-display);text-transform:uppercase;margin:5px 0 0;}
+.keyboard-help-close{flex:none;display:grid;place-items:center;width:40px;height:40px;border:2px solid #15171a;border-radius:9px;background:#e64c58;color:white;box-shadow:2px 3px 0 #15171a;cursor:pointer;transition:transform .15s;}
+.keyboard-help-close:hover{transform:rotate(6deg) scale(1.05);}
+.keyboard-help-close svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;}
+.keyboard-help-subtitle{padding:15px 24px 10px;margin:0;font-size:13px;line-height:1.5;color:var(--bl-ink-muted);}
+.keyboard-help-rows{display:grid;padding:3px 24px 17px;}
+.keyboard-help-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 0;border-bottom:1px solid var(--bl-divider);font-size:13px;font-weight:700;}
+.keyboard-help-keys{flex:none;display:flex;gap:5px;}
+.keyboard-help-keys kbd{display:grid;place-items:center;min-width:30px;min-height:30px;padding:5px;border:2px solid var(--bl-line);background:var(--bl-panel-alt);border-radius:6px;box-shadow:2px 2px 0 var(--bl-line);font:850 12px/1 var(--bl-font-body);}
+.keyboard-help-note{font-size:11px;line-height:1.6;color:var(--bl-ink-muted);margin:0;padding:0 24px 13px;}
+.keyboard-help-hint{margin:0;padding:12px 24px;background:var(--bl-panel-alt);font-size:11px;font-weight:800;border-top:1px solid var(--bl-divider);}
+.keyboard-help-dialog button:focus-visible{outline:3px solid var(--bl-accent);outline-offset:3px;}
+@keyframes keyboard-help-in{from{opacity:0;transform:translateY(20px) scale(.94) rotate(-.7deg);}to{opacity:1;transform:none;}}
+@keyframes keyboard-help-out{to{opacity:0;transform:translateY(12px) scale(.97);}}
+@keyframes keyboard-help-backdrop{from{opacity:0;}to{opacity:1;}}
+@media(max-width:520px){.keyboard-help-head{padding:17px 15px 12px;}.keyboard-help-subtitle{padding:12px 15px 8px;}.keyboard-help-rows{padding:2px 15px 12px;}.keyboard-help-note{padding:0 15px 13px;}.keyboard-help-hint{padding:10px 15px;}.keyboard-help-row{font-size:12px;}.keyboard-help-keys kbd{min-width:27px;min-height:27px;}.keyboard-help-trigger{min-width:40px;gap:0;}.keyboard-help-trigger>.icon{display:none;}}
+@media(prefers-reduced-motion:reduce){.keyboard-help-dialog,.keyboard-help-dialog.is-closing,.keyboard-help-dialog::backdrop{animation:none;}.keyboard-help-close{transition:none;}}
