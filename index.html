@@ -50,14 +50,14 @@
 <script defer src="assets/js/motion/upgrade.js"></script>
 <script defer src="assets/js/core/pwa.js"></script>
 <link rel="stylesheet" href="./assets/css/motion/scroll-sync.css">
-<script defer src="./assets/js/motion/scroll-sync.js?v=20261120-modular-status"></script>
+<script defer src="./assets/js/motion/scroll-sync.js?v=20261121-faq-panel-v2"></script>
 <link rel="canonical" href="https://smdzstudios.com/">
 <meta property="og:url" content="https://smdzstudios.com/">
 <link rel="stylesheet" href="./assets/css/pages/technologies-layout.css">
 <script src="./assets/config/site-config.js?v=20261120-maintenance"></script>
 <script src="./assets/js/core/maintenance-gate.js?v=20261120"></script>
-<link rel="stylesheet" href="assets/css/pages/faq.css?v=20261121-faq-offline">
-<script defer src="assets/js/pages/faq.js?v=20261121-faq-offline"></script>
+<link rel="stylesheet" href="assets/css/pages/faq.css?v=20261121-faq-panel-v2">
+<script defer src="assets/js/pages/faq.js?v=20261121-faq-panel-v2"></script>
 </head>
 <body class="nui-mode">
 <div class="cinema-loader" aria-hidden="true"><div class="loader-center"><img src="assets/images/smdz-logo.png" alt="" width="944" height="678" draggable="false"><div class="loader-track"><i></i></div><span data-es="CARGANDO" data-fr="CHARGEMENT" data-de="LADEN" data-pt="A CARREGAR" data-it="CARICAMENTO">LOADING</span></div></div>
@@ -68,6 +68,7 @@
 <a class="section-dot" href="#studio"><svg aria-hidden="true" class="icon section-icon" viewbox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"></path></svg><span data-de="Über mich" data-es="Sobre mí" data-fr="À propos" data-it="Chi sono" data-pt="Sobre mim">About me</span></a>
 <a class="section-dot" href="#technologies"><svg aria-hidden="true" class="icon section-icon" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-2-16-4 20"/></svg><span data-de="Technik" data-es="Tecnologías" data-fr="Technologies" data-it="Tecnologie" data-pt="Tecnologias">Technologies</span></a>
 <a class="section-dot" href="#custom-work"><svg aria-hidden="true" class="icon section-icon" viewbox="0 0 24 24"><rect height="14" rx="2" width="18" x="3" y="7"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18M10 13v2h4v-2"></path></svg><span data-de="Aufträge" data-es="A medida" data-fr="Sur mesure" data-it="Su misura" data-pt="À medida">Custom work</span></a>
+<a class="section-dot" href="#faq"><svg aria-hidden="true" class="icon section-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a3 3 0 0 1 5.8 1c0 2.2-3 2.6-3 4.7M12 17.6h.01"/></svg><span data-de="Häufige Fragen" data-es="Preguntas frecuentes" data-fr="Questions fréquentes" data-it="Domande frequenti" data-pt="Perguntas frequentes">FAQ</span></a>
 </nav>
 <div aria-hidden="true" class="ambient"><div class="cinema-camera"><div class="ambient-photo"></div></div><div class="ambient-overlay"></div><div class="cinema-vignette"></div><div class="cinema-grain"></div><canvas class="ambient-particles" id="ambient-particles" aria-hidden="true"></canvas></div>
 <div aria-hidden="true" class="scroll-progress"></div>
@@ -146,7 +147,7 @@
 <div class="availability" id="work-availability" data-state="available"><i aria-hidden="true"></i><span data-v4-copy>Available for custom work</span></div><div class="custom-actions"><a class="btn btn-large custom-contact" href="./discord/" target="_blank" rel="noopener noreferrer" draggable="false"><svg aria-hidden="true" class="icon brand-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515c-.21.375-.456.88-.625 1.28a18.27 18.27 0 0 0-5.414 0 12.64 12.64 0 0 0-.632-1.28 19.73 19.73 0 0 0-4.889 1.519C.78 8.96-.057 13.433.362 17.844a19.91 19.91 0 0 0 5.993 3.022c.483-.654.914-1.35 1.285-2.083a12.9 12.9 0 0 1-2.023-.966c.17-.125.336-.255.497-.39 3.9 1.81 8.13 1.81 11.984 0 .163.135.329.265.498.39-.645.38-1.323.704-2.027.968.37.73.797 1.428 1.285 2.08a19.9 19.9 0 0 0 5.997-3.02c.49-5.116-.839-9.548-3.534-13.475ZM8.02 15.14c-1.17 0-2.13-1.075-2.13-2.398 0-1.324.94-2.405 2.13-2.405 1.2 0 2.15 1.09 2.13 2.405 0 1.323-.94 2.398-2.13 2.398Zm7.87 0c-1.17 0-2.13-1.075-2.13-2.398 0-1.324.938-2.405 2.13-2.405 1.2 0 2.15 1.09 2.13 2.405 0 1.323-.93 2.398-2.13 2.398Z"></path></svg><span data-es="Hablemos por Discord" data-fr="Discutons sur Discord" data-de="Kontakt über Discord" data-pt="Vamos falar no Discord" data-it="Parliamone su Discord">Let's talk on Discord</span><svg class="icon outbound" aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg></a><a class="custom-terms" href="https://smdz-studios.tebex.io/legal#legal-custom-work" target="_blank" rel="noopener noreferrer" draggable="false" data-es="Condiciones del servicio" data-fr="Conditions du service" data-de="Auftragsbedingungen" data-pt="Condições de trabalhos personalizados" data-it="Condizioni dei lavori personalizzati">Custom work terms</a></div></div>
 <div class="custom-art" aria-hidden="true"><svg viewBox="0 0 230 170" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke="#15171a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="26" width="174" height="119" rx="10" fill="#15171a"/><rect x="18" y="19" width="174" height="119" rx="10" fill="#f5f4ef"/><path d="M18 45H192"/><path d="M18 29a10 10 0 0 1 10-10h154a10 10 0 0 1 10 10v16H18Z" fill="#ffcc28"/><circle cx="33" cy="32" r="3" fill="#15171a"/><circle cx="44" cy="32" r="3" fill="#15171a"/><circle cx="55" cy="32" r="3" fill="#15171a"/><path d="m75 72-22 20 22 20m53-40 22 20-22 20m-17-51-17 62" stroke-width="7"/><path d="M170 108l10 15 17-5 3 18 17 7-11 12-17-1-7 9-8-12-17 1-4-17Z" fill="#ffcc28"/><path d="m193 133-12 12m4-12h8v8" stroke-width="2.8"/><path d="M204 20v16m-8-8h16M10 144v12m-6-6h12" stroke="#ffcc28" stroke-width="4"/></g></svg></div>
 </section>
-<section class="faq-section wrap" id="faq" aria-labelledby="faq-title" data-reveal>
+<section class="faq-section wrap panel" id="faq" aria-labelledby="faq-title" data-reveal>
 <div class="faq-heading">
 <div>
 <span class="faq-eyebrow" data-es="CENTRO DE AYUDA" data-fr="CENTRE D’AIDE" data-de="HILFEBEREICH" data-pt="CENTRO DE AJUDA" data-it="CENTRO ASSISTENZA">HELP CENTER</span>

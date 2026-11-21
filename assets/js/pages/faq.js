@@ -81,6 +81,34 @@
   };
   const base=new URL('../../../',document.currentScript.src);
   const opened=new Set();
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+  const animations=new WeakMap();
+  function expandItem(details,body,expand){
+    const running=animations.get(details);
+    const startHeight=details.getBoundingClientRect().height;
+    if(running){running.cancel();animations.delete(details);}
+    body.getAnimations?.().forEach(animation=>animation.cancel());
+    if(expand)details.open=true;
+    if(reduce.matches||!details.animate){
+      details.open=expand;
+      details.style.removeProperty('overflow');
+      return;
+    }
+    const endHeight=expand?details.querySelector('summary').offsetHeight+body.offsetHeight:details.querySelector('summary').offsetHeight;
+    const duration=expand?340:280;
+    details.style.overflow='hidden';
+    const animation=details.animate([{height:startHeight+'px'},{height:endHeight+'px'}],{duration,easing:'cubic-bezier(.22,.77,.25,1)',fill:'both'});
+    animations.set(details,animation);
+    body.animate([{opacity:expand?0:1,transform:expand?'translateY(-8px)':'translateY(0)'},{opacity:expand?1:0,transform:expand?'translateY(0)':'translateY(-8px)'}],{duration,easing:'ease-out'});
+    animation.onfinish=()=>{
+      if(animations.get(details)!==animation)return;
+      details.open=expand;
+      details.style.removeProperty('overflow');
+      animation.cancel();
+      animations.delete(details);
+    };
+  }
+
   const normalize=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase();
   const current=()=>Object.hasOwn(ui,root.lang)?root.lang:'en';
   function render(){
@@ -102,7 +130,12 @@
         link.insertAdjacentHTML('beforeend','<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>');body.append(link);
       }
       details.append(summary,body);
-      details.addEventListener('toggle',()=>{if(details.open)opened.add(entry.id);else opened.delete(entry.id);});
+      summary.addEventListener('click',event=>{
+        event.preventDefault();
+        const expand=!opened.has(entry.id);
+        if(expand)opened.add(entry.id);else opened.delete(entry.id);
+        expandItem(details,body,expand);
+      });
       fragment.append(details);
     }
     list.replaceChildren(fragment);
